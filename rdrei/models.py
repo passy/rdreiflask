@@ -9,6 +9,3 @@ Model-ish adapters for the redis store.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-
-class Photos(object):
-    pass

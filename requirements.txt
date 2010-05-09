@@ -1,4 +1,4 @@
 jinja2
 werkzeug
 flask
-redis-py
+git+http://github.com/andymccurdy/redis-py.git#egg=redis

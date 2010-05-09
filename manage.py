@@ -11,7 +11,6 @@ Management script.
 """
 
 from werkzeug import script
-from rdrei.models import Photos
 
 
 def action_runserver():
@@ -19,6 +18,27 @@ def action_runserver():
 
     app.run(debug=True, host="0.0.0.0")
 
+
+def action_flickr_import():
+    from rdrei.application import app
+    from rdrei.utils.redis_db import open_connection
+    from rdrei.utils import flickr
+
+    # Without this, redis is not initialized.
+    db = open_connection()
+
+    for photo in flickr.get_recent_profile_photos():
+        # Check if the entry exists.
+        key = 'photo:' + photo['id']
+        print("Current Key: ", key)
+        if db.type(key) != 'none':
+            print("Came across already known photo.")
+            break
+
+        for subkey in ('title', 'farm', 'server', 'secret', 'id'):
+            db.hset(key, subkey, photo[subkey])
+
+        db.lpush('photos', photo['id'])
 
 if __name__ == '__main__':
     script.run()
