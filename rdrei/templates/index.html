@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
+    </head>
+    <body id="home">
+        <header>
+            <h1>r3</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Fotos</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section id="content">
+            Hello World.
+        </section>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="{{ url_for("static", filename="js/rdrei.js") }}" type="text/javascript"></script>
+    </body>
+</html>
