@@ -7,9 +7,11 @@
 @import "blueprint/typography"
 
 @import constants
+@import partials/fonts
 
 $blueprint-font-size: 14px
 $content_width: 600px
+$blueprint-font-family: "DroidSans", "Helvetica Neue", Arial, Helvetica, sans-serif
 +blueprint-typography
 
 section, article, header, footer
@@ -68,8 +70,6 @@ nav
 
 body
   background: #ccc image_url("bumpmap.png") fixed no-repeat 0 0
-  width: 100%
-  height: 100%
   +transition(background-color, 5s, linear)
 
   +body-color-scheme("blue", #18597f)
