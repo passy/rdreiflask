@@ -32,5 +32,9 @@ def index():
 def blog():
     return _render_template("blog.html")
 
+@app.route('/photos')
+def photos():
+    return _render_template("photos.html")
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

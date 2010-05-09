@@ -23,7 +23,8 @@ $.widget("rdrei.topMenu", {
     options: {
         crawlable: true,
         target: "#ajax-endpoint",
-        activeClass: "active"
+        activeClass: "active",
+        slideEffect: false
     },
 
     _create: function () {
@@ -39,29 +40,58 @@ $.widget("rdrei.topMenu", {
 
     // Activates the menu entry with the given url.
     _activate: function (url) {
-        var className = this.options.activeClass;
+        var className = this.options.activeClass,
+            oldEntry, newEntry,
+            oldIndex, newIndex;
         // Exception for '/' because it's replaced by address.
         if (url === '/') {
             url = '#';
         }
 
-        this.element.find("a").removeClass(className).
-            filter("[href$='" + url + "']").addClass(className);
+        oldEntry = this.element.find("a." + className).removeClass(className);
+        newEntry = this.element.find("a[href$='" + url + "']").addClass(className);
+
+        if (oldEntry) {
+            // Check how the elements are related.
+            oldIndex = oldEntry.parent().index();
+            newIndex = newEntry.parent().index();
+
+            // Is left of the old.
+            return (oldIndex > newIndex);
+        }
     },
 
     _onChange: function (event) {
         var $endpoint = $(this.options.target),
             url = event.value + "?ajax",
-            that = this;
+            that = this,
+            // Boolean that stores from where the slide comes.
+            fromRight,
+            direction;
 
         this._log("Loading url ", url);
+
+        fromRight = that._activate(event.value);
+        direction = fromRight ? 'right' : 'left';
+
+        if (this.options.slideEffect) {
+            $endpoint.hide('slide', {direction: direction})
+        }
+
         $endpoint.load(url, function () {
             // Check for colors.
-            var color = $endpoint.children(1).attr("data-color");
+            var color = $endpoint.children(1).attr("data-color"),
+                direction = fromRight ? 'left' : 'right';
             if (color) {
                 $("body").colorChanger(color);
             }
-            that._activate(event.value);
+
+            if (that.options.slideEffect) {
+                $endpoint.show('slide', {
+                    direction: direction
+                });
+            }
+            that._trigger('loaded', 0);
         });
     }
 });
@@ -77,20 +107,16 @@ $.fn.colorChanger = function (color, options) {
         that = this,
         previousColor = this.data('color');
 
-    function removePreviousColor() {
-        // Remove previously applied color.
-        if (previousColor) {
-            console.log("Found color: ", previousColor);
-            that.removeClass(previousColor);
-        }
+    // Remove previously applied color.
+    if (previousColor) {
+        that.removeClass(previousColor);
     }
 
     if (Modernizr.cssanimations) {
-        removePreviousColor();
         this.addClass(color);
     } else {
-        removePreviousColor();
-        this.stop().addClass(color, settings.duration);
+        // Reset previous animation. Won't look too good, I guess. \:
+        this.stop().attr('style', '').addClass(color, settings.duration);
     }
 
     // Save the currently applied color.
@@ -100,7 +126,12 @@ $.fn.colorChanger = function (color, options) {
 };
 
 $(document).ready(function () {
-    $("header nav").topMenu();
+    $("header nav").topMenu({
+        loaded: function () {
+            // Enable fancy effects after the first load.
+            $(this).topMenu('option', 'slideEffect', true);
+        }
+    });
     // Show the loading indicator
     $("#loading").ajaxStart(function () {
         $(this).show();
