@@ -1,6 +1,9 @@
 @import "compass/reset"
 @import "compass/css3/transition"
 @import "compass/css3/border-radius"
+@import "compass/css3/box-shadow"
+@import "compass/css3/text-shadow"
+@import "compass/layout/sticky-footer"
 @import "blueprint/typography"
 
 @import constants
@@ -9,7 +12,7 @@ $blueprint-font-size: 14px
 $content_width: 600px
 +blueprint-typography
 
-section, article, header
+section, article, header, footer
   display: block
 
 =centered
@@ -20,7 +23,7 @@ section, article, header
   &.#{$name}
     background-color: $color
     a
-      &:hover, &:focus
+      &:hover, &.active
         background: $color
 
 a
@@ -28,12 +31,23 @@ a
   text-decoration: none
   border-bottom: 1px dotted
 
-  &:hover, &:focus
+  &:hover, &.active
+    +text-shadow(none)
     +border-radius(5px)
     border: none
 
+  &:visited
+    color: inherit
+
 header
   +centered
+
+footer
+  +centered
+  +text-shadow(#FFF8E7, 0, 1px)
+
+  margin-top: 10px
+  text-align: center
 
 nav
   text-align: center
@@ -45,7 +59,11 @@ nav
       margin-right: 20px
 
       a
+        +text-shadow(#aaa, 1px, 0, 4px)
         color: white
+
+        &:visited
+          color: white
 
 body
   background: #ccc image_url("bumpmap.png") fixed no-repeat 0 0
@@ -70,9 +88,26 @@ h1
 
 #content
   +border-radius(15px)
+  +box-shadow(1px, 1px, 5px, rgba(0, 0, 0, 0.3))
   +centered
   width: 600px
   min-height: 500px
   background: rgba(255, 255, 255, 0.6)
+
+  .inner
+    padding: 15px
+
+#loading
+  +border-radius(5px)
+  +box-shadow(1px, 1px, 5px, rgba(0, 0, 0, 0.3))
+  +text-shadow(0, 1px, 0, #333)
+  position: absolute
+  top: 10px
+  right: 10px
+  display: none
+
+  background: rgba(0, 0, 0, 0.5)
+  padding: 3px
+  color: white
 
 //  vim: set ts=8 sw=2 tw=0 ft=sass: 
