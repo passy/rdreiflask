@@ -3,6 +3,13 @@
 {% block content %}
 <div class="wrapper" data-color="ltblue">
     <h2>Photos</h2>
-    Again, coming not so soon.
+
+    <h3>Keys in DB</h3>
+
+    <ul>
+    {% for photo in photos %}
+    <li>{{ photo }}</li>
+    {% endfor %}
+    </ul>
 </div>
 {% endblock %}

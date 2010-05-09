@@ -27,4 +27,8 @@ def blog():
 @app.route('/photos')
 def photos():
     db = get_db()
-    return render_template("photos.html")
+
+    photo_count = db.llen('photos')
+    photo_keys = db.lrange('photos', 0, photo_count)
+
+    return render_template("photos.html", photos=photo_keys)

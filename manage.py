@@ -31,7 +31,7 @@ def action_flickr_import():
         # Check if the entry exists.
         key = 'photo:' + photo['id']
         print("Current Key: ", key)
-        if db.type(key) != 'none':
+        if db.exists(key):
             print("Came across already known photo.")
             break
 
