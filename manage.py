@@ -38,7 +38,13 @@ def action_flickr_import():
         for subkey in ('title', 'farm', 'server', 'secret', 'id'):
             db.hset(key, subkey, photo[subkey])
 
-        db.lpush('photos', photo['id'])
+        # Save the tags to subsets
+        for tag in photo['tags'].split(' '):
+            db.sadd('phototags:' + tag, photo['id'])
+            # And don't forget to keep track of the tags itself.
+            db.sadd('phototags', tag)
+
+        db.sadd('photos', photo['id'])
 
 if __name__ == '__main__':
     script.run()

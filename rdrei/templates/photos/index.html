@@ -4,11 +4,11 @@
 <div class="wrapper" data-color="ltblue">
     <h2>Photos</h2>
 
-    <h3>Keys in DB</h3>
+    <h3>Tags</h3>
 
     <ul>
-    {% for photo in photos %}
-    <li>{{ photo }}</li>
+    {% for album in albums %}
+    <li><a href="{{ url_for('photo_details', album_id=album['id']) }}">{{ album['title'] }}</a></li>
     {% endfor %}
     </ul>
 </div>

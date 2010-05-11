@@ -9,9 +9,9 @@ Routing and outputting the views.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
+from flask import g
 from rdrei.application import app
 from rdrei.utils.template import render_template
-from rdrei.utils.redis_db import get_db
 
 
 @app.route('/')
@@ -24,11 +24,4 @@ def blog():
     return render_template("blog.html")
 
 
-@app.route('/photos')
-def photos():
-    db = get_db()
-
-    photo_count = db.llen('photos')
-    photo_keys = db.lrange('photos', 0, photo_count)
-
-    return render_template("photos.html", photos=photo_keys)
+import rdrei.views.photos

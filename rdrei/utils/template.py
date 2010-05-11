@@ -10,6 +10,7 @@ Template rendering helpers.
 """
 
 from flask import render_template as _render_template, request
+from functools import wraps
 
 
 def render_template(template_name, **context):
@@ -22,3 +23,18 @@ def render_template(template_name, **context):
     context['template_base'] = base
 
     return _render_template(template_name, **context)
+
+
+def templated(template=None):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            template_name = template
+            if template_name is None:
+                template_name = request.endpoint + '.html'
+            ctx = f(*args, **kwargs)
+            if ctx is None:
+                ctx = {}
+            return render_template(template_name, **ctx)
+        return decorated_function
+    return decorator

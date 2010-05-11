@@ -9,16 +9,16 @@
             <h1>r3</h1>
             <nav>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                    <li><a href="/photos">Fotos</a></li>
+                    <li><a href="/" rel="address:/">Home</a></li>
+                    <li><a href="/blog" rel="address:/blog">Blog</a></li>
+                    <li><a href="/photos" rel="address:/photos">Fotos</a></li>
                 </ul>
             </nav>
         </header>
-        <section id="content">
-            <article class="inner" id="ajax-endpoint">
+        <section id="content" id="ajax-endpoint">
+            <div id="ajax-endpoint">
                 {% block content %}Loading ...{% endblock %}
-            </article>
+            </div>
         </section>
         <footer>
             &copy; 2010, Pascal Hartig, rdreinet solutions

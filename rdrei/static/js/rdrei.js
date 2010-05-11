@@ -30,10 +30,19 @@ $.widget("rdrei.topMenu", {
     _create: function () {
         var that = this;
 
+        this._addressInitialized = false;
         $.address.crawlable(this.options.crawlable);
         this.element.find("a").address();
-        $.address.change(function (event) {
+        $.address.internalChange(function (event) {
             that._onChange(event);
+        });
+        $.address.externalChange(function (event) {
+            // Take care of the initial change.
+            if (event.path === '/') {
+                $.address.path(window.location.pathname);
+            } else {
+                that._onChange(event);
+            }
         });
         this._log("Initialized address topMenu content loader.");
     },
@@ -43,10 +52,8 @@ $.widget("rdrei.topMenu", {
         var className = this.options.activeClass,
             oldEntry, newEntry,
             oldIndex, newIndex;
-        // Exception for '/' because it's replaced by address.
-        if (url === '/') {
-            url = '#';
-        }
+
+        this._log("Searching for URL ", url);
 
         oldEntry = this.element.find("a." + className).removeClass(className);
         newEntry = this.element.find("a[href$='" + url + "']").addClass(className);
@@ -63,12 +70,13 @@ $.widget("rdrei.topMenu", {
 
     _onChange: function (event) {
         var $endpoint = $(this.options.target),
-            url = event.value + "?ajax",
+            url = event.path + "?ajax",
             that = this,
             // Boolean that stores from where the slide comes.
             fromRight,
             direction;
 
+        console.log("Event", event);
         this._log("Loading url ", url);
 
         fromRight = that._activate(event.value);
