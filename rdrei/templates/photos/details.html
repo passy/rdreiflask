@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="wrapper" data-color="ltblue">
-    <h2>Photos</h2>
+    <h2>Album: {{ album['name'] }}</h2>
 
     <ul>
-    {% for album in albums %}
-    <li><a href="{{ url_for('photo_details', album_id=album['id']) }}">{{ album['name'] }}</a></li>
+    {% for photo in photos %}
+        <li>{{ photo }}</li>
     {% endfor %}
     </ul>
 </div>

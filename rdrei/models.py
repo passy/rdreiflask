@@ -19,7 +19,7 @@ class Photos(object):
 
     @staticmethod
     def by_id(id):
-        return g.db.hgetall("photo" + id)
+        return g.db.hgetall("photo:" + id)
 
     @staticmethod
     def by_tag(tagname):
@@ -46,21 +46,22 @@ class PhotoAlbums(object):
     def by_id(id, attribute=None):
         """Find a photoalbum by its id."""
 
-        key = "photoalbum:" + id
+        key = "photoalbum:" + str(id)
 
         if attribute:
-            g.db.hget(key, attribute)
+            return g.db.hget(key, attribute)
         else:
             return g.db.hgetall(key)
 
     @staticmethod
-    def all(offset=0, limit=None, attribute=None):
+    def all(offset=1, limit=None, attribute=None):
         """
         Get all albums with by an optional offset of ``offset`` and a
         maximum result size of ``limit``.
+        Remember the starting value is 1 not 0!
         """
         if limit is None:
-            limit = int(g.db.get("photoalbum")) - offset
+            limit = int(g.db.get("photoalbum")) - (offset - 1)
 
         for i in xrange(offset, offset + limit):
             key = "photoalbum:" + str(i)
@@ -68,6 +69,8 @@ class PhotoAlbums(object):
                 result = g.db.hget(key, attribute)
             else:
                 result = g.db.hgetall(key)
+                # This could be useful.
+                result['id'] = i
 
             # Make sure, we're not yielding a deleted entry.
             if result:

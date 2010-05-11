@@ -25,4 +25,7 @@ def photo_index():
 @templated("photos/details.html")
 def photo_details(album_id):
 
-    return {'photos': Photo.all_by_album(album_id)}
+    return {
+        'photos': Photos.all_by_album(album_id),
+        'album': PhotoAlbums.by_id(album_id)
+    }
