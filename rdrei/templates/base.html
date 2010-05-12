@@ -4,14 +4,14 @@
     <head>
         <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
     </head>
-    <body id="home">
+    <body>
         <header>
             <h1>r3</h1>
-            <nav>
+            <nav id="main-nav">
                 <ul>
-                    <li><a href="/" rel="address:/">Home</a></li>
-                    <li><a href="/blog" rel="address:/blog">Blog</a></li>
-                    <li><a href="/photos" rel="address:/photos">Fotos</a></li>
+                    <li><a href="{{ url_for("home") }}">Home</a></li>
+                    <li><a href="{{ url_for("blog_index") }}">Blog</a></li>
+                    <li><a href="{{ url_for("photo_index") }}">Fotos</a></li>
                 </ul>
             </nav>
         </header>

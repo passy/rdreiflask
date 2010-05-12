@@ -56,7 +56,7 @@ footer
   margin-top: 10px
   text-align: center
 
-nav
+#main-nav
   text-align: center
   ul
     list-style: none
@@ -91,6 +91,9 @@ h1
   text-indent: -5000px
   background: image_url("logo_glow.png") scroll no-repeat 0 0
 
+h2, h3
+  +text-shadow(0, 1px, 1px, rgba(0, 0, 0, 0.7))
+
 author
   font-style: italic
 
@@ -117,5 +120,7 @@ author
   background: rgba(0, 0, 0, 0.5)
   padding: 3px
   color: white
+
+@import partials/photos
 
 //  vim: set ts=8 sw=2 tw=0 ft=sass: 

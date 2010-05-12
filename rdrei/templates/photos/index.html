@@ -9,5 +9,15 @@
     <li><a href="{{ url_for('photo_details', album_id=album['id']) }}">{{ album['name'] }}</a></li>
     {% endfor %}
     </ul>
+    <ul class="photo-gallery">
+        {% for album in range(16) %}
+        <li class="watercolor">
+            <a href="#">
+                <em>Album Title</em>
+                <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Album Title" />
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

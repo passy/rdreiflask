@@ -4,9 +4,13 @@
 <div class="wrapper" data-color="ltblue">
     <h2>Album: {{ album['name'] }}</h2>
 
-    <ul>
+    <ul class="photo-gallery polaroid">
     {% for photo in photos %}
-        <li>{{ photo }}</li>
+        <li>
+        <a href="{{ photo.url.large }}" title="{{ photo.title }}">
+            <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
+        </a>
+        </li>
     {% endfor %}
     </ul>
 </div>

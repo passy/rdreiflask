@@ -15,12 +15,12 @@ from rdrei.utils.template import render_template
 
 
 @app.route('/')
-def index():
+def home():
     return render_template("index.html")
 
 
 @app.route('/blog')
-def blog():
+def blog_index():
     return render_template("blog.html")
 
 

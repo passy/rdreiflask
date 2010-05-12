@@ -1,0 +1,12 @@
+@import "compass/css3/border-radius"
+
+// Removes all styling from the link defined as default in screen.sass
+=nostyle-link
+  border: none
+  padding: 0
+
+  // We leave the .active class in place.
+  &:hover
+    +border-radius(0)
+    background: inherit
+    color: inherit

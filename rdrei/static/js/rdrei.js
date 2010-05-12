@@ -83,7 +83,6 @@ $.widget("rdrei.topMenu", {
             fromRight,
             direction;
 
-        console.log("Event", event);
         this._log("Loading url ", url);
 
         fromRight = that._activate(event.value);

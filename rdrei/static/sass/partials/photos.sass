@@ -1,0 +1,63 @@
+// Contains style definitions for photo pages
+
+@import "compass/css3/box-shadow"
+@import "compass/css3/transition"
+@import "compass/css3/transform"
+@import constants
+@import mixins
+
+.photo-gallery
+  list-style: none
+  text-align: center
+  margin: 0
+  padding: 0
+
+  li
+    display: inline-block
+
+  &.watercolor
+    li
+      position: relative
+      height: 175px
+      width: 212px
+      margin: 10px
+      em
+        // Contains the album or photo title
+        width: 193px
+        height: 25px
+        display: block
+        position: absolute
+        top: 2px
+        left: 2px
+        padding-top: 140px
+        background: transparent image_url(unquote("photomasks/watercolor-mask.png")) no-repeat
+        text-align: center
+      img
+        padding: 14px 12px 12px 13px
+      a
+        +nostyle-link
+
+  &.polaroid
+    li
+      display: inline-block
+      a
+        +box-shadow(0, 3px, 6px, rgba(0, 0, 0, 0.25))
+        +nostyle-link
+        display: inline-block
+        background: #fff
+        padding: 10px
+        margin: 5px
+
+        &[title]
+
+          &:after
+            content: attr(title)
+
+          img
+            margin-bottom: 10px
+
+        &:hover
+          background: #fff
+
+      img
+        display: block
