@@ -2,6 +2,13 @@
  * rdrei.js
  * ~~~~~~~~
  *
+ * Known Bugs
+ * ==========
+ * 
+ *  - Hash fragment is appended on initial page load.
+ *  - Clicking on 'Home' menu entry scrolls to top of the page.
+ *  - Fast loading might replace site content before it's slided out.
+ *
  * :copyright: date, Pascal Hartig <phartig@rdrei.net>
  * :license: GPL v3, see doc/LICENSE for more details.
  */
@@ -30,16 +37,16 @@ $.widget("rdrei.topMenu", {
     _create: function () {
         var that = this;
 
-        this._addressInitialized = false;
         $.address.crawlable(this.options.crawlable);
-        this.element.find("a").address();
+        // Globally enabled.
+        $("a").address();
         $.address.internalChange(function (event) {
             that._onChange(event);
         });
         $.address.externalChange(function (event) {
             // Take care of the initial change.
-            if (event.path === '/') {
-                $.address.path(window.location.pathname);
+            if (window.location.pathname != '/' && event.path === '/') {
+                $.address.value(window.location.pathname);
             } else {
                 that._onChange(event);
             }
@@ -56,7 +63,7 @@ $.widget("rdrei.topMenu", {
         this._log("Searching for URL ", url);
 
         oldEntry = this.element.find("a." + className).removeClass(className);
-        newEntry = this.element.find("a[href$='" + url + "']").addClass(className);
+        newEntry = this.element.find("a[href~='" + url + "']:last").addClass(className);
 
         if (oldEntry) {
             // Check how the elements are related.

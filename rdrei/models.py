@@ -11,6 +11,64 @@ Model-ish adapters for the redis store.
 
 from flask import g
 
+class FlickrURL(object):
+    """Converts a photo to a URL."""
+
+    _SIZE_MAPPING = {
+        'small_square': '_s',
+        'thumb': '_t',
+        'small': '_m',
+        'medium': '',
+        'large': '_b',
+        'original': '_o'
+    }
+
+    _BASE_URL = "http://static.flickr.com/"
+
+    def __init__(self, photo):
+        self.photo = photo
+
+    def __getattr__(self, method):
+        """
+        Allows access to flickr url in an easy manner. Like
+        photo = Photo.by_id(123)
+        url = photo.url.thumb
+        """
+        if method in self._SIZE_MAPPING:
+            return "{base_url}/{server}/{id}_{secret}{size}.jpg".format(
+                base_url=self._BASE_URL,
+                server=self.photo.server,
+                id=self.photo.id,
+                secret=self.photo.secret,
+                size=self._SIZE_MAPPING[method]
+            )
+        else:
+            return object.__getattr__(method)
+
+
+class Photo(object):
+    """
+    Object representation of a photo.
+    """
+
+    def __init__(self, data):
+        self.id = data['id']
+        self.title = data['title']
+        self.farm = data['farm']
+        self.server = data['server']
+        self.secret = data['secret']
+
+    @property
+    def url(self):
+        # Create the url object on the fly.
+        return FlickrURL(self)
+
+    def __str__(self):
+        return '<Photo(id={0}, title="{1}")>'.format(
+            self.id,
+            self.title
+        )
+
 
 class Photos(object):
     """
@@ -19,7 +77,7 @@ class Photos(object):
 
     @staticmethod
     def by_id(id):
-        return g.db.hgetall("photo:" + id)
+        return Photo(g.db.hgetall("photo:" + str(id)))
 
     @staticmethod
     def by_tag(tagname):
