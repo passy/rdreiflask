@@ -5,11 +5,7 @@
 {%- endmacro -%}
 
 {% macro menu_item(slug, endpoint, title) %}
-<li>
-<a{% if slug == menu_item %} class="active"{% endif %} href="{{ url_for(endpoint) }}">
-    {{ title }}
-</a>
-</li>
+<li><a{% if slug == menu_item %} class="active"{% endif %} href="{{ url_for(endpoint) }}">{{ title }}</a></li>
 {% endmacro %}
 
 <html>

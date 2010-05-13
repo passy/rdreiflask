@@ -32,7 +32,8 @@ $.widget("rdrei.topMenu", {
         target: "#ajax-endpoint",
         activeClass: "active",
         slideEffect: false,
-        titlePrefix: "rdrei.net \u2014 "
+        titlePrefix: "rdrei.net \u2014 ",
+        defaultTitle: "Pascal Hartig"
     },
 
     _create: function () {
@@ -105,14 +106,18 @@ $.widget("rdrei.topMenu", {
             var $wrapper = $endpoint.children(1),
                 color = $wrapper.attr("data-color"),
                 title = $wrapper.attr("data-title"),
-                direction = fromRight ? 'left' : 'right';
+                direction = fromRight ? 'left' : 'right',
+                newTitle = that.options.titlePrefix + 
+                    that.options.defaultTitle;
 
             if (color) {
                 $("body").colorChanger(color);
             }
             if (title) {
-                $.address.title(this.options.titlePrefix + title);
+                newTitle = that.options.titlePrefix + title;
             }
+            // $.address.title is useless.
+            window.document.title = newTitle;
 
             if (that.options.slideEffect) {
                 $endpoint.show('slide', {
