@@ -31,7 +31,8 @@ $.widget("rdrei.topMenu", {
         crawlable: true,
         target: "#ajax-endpoint",
         activeClass: "active",
-        slideEffect: false
+        slideEffect: false,
+        titlePrefix: "rdrei.net \u2014 "
     },
 
     _create: function () {
@@ -40,6 +41,8 @@ $.widget("rdrei.topMenu", {
         $.address.crawlable(this.options.crawlable);
         // Globally enabled.
         $("a").address();
+        // Save the initial color.
+        this._init_colorchanger();
         $.address.internalChange(function (event) {
             that._onChange(event);
         });
@@ -52,6 +55,11 @@ $.widget("rdrei.topMenu", {
             }
         });
         this._log("Initialized address topMenu content loader.");
+    },
+
+    _init_colorchanger: function () {
+        var $body = $("body");
+        $body.data('color', $body.attr('class'));
     },
 
     // Activates the menu entry with the given url.
@@ -94,10 +102,16 @@ $.widget("rdrei.topMenu", {
 
         $endpoint.load(url, function () {
             // Check for colors.
-            var color = $endpoint.children(1).attr("data-color"),
+            var $wrapper = $endpoint.children(1),
+                color = $wrapper.attr("data-color"),
+                title = $wrapper.attr("data-title"),
                 direction = fromRight ? 'left' : 'right';
+
             if (color) {
                 $("body").colorChanger(color);
+            }
+            if (title) {
+                $.address.title(this.options.titlePrefix + title);
             }
 
             if (that.options.slideEffect) {

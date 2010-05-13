@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 
+{%- macro get_body_class() -%}
+{% if body_class is defined %} class="{{ body_class }}"{% endif %}
+{%- endmacro -%}
+
+{% macro menu_item(slug, endpoint, title) %}
+<li>
+<a{% if slug == menu_item %} class="active"{% endif %} href="{{ url_for(endpoint) }}">
+    {{ title }}
+</a>
+</li>
+{% endmacro %}
+
 <html>
     <head>
         <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
+        <title>rdrei.net — {% block title %}Pascal Hartig{% endblock %}</title>
     </head>
-    <body>
+    <body{{ get_body_class() }}>
         <header>
             <h1>r3</h1>
             <nav id="main-nav">
                 <ul>
-                    <li><a href="{{ url_for("home") }}">Home</a></li>
-                    <li><a href="{{ url_for("blog_index") }}">Blog</a></li>
-                    <li><a href="{{ url_for("photo_index") }}">Fotos</a></li>
+                    {{ menu_item("home", "home", "Home") }}
+                    {{ menu_item("blog", "blog_index", "Blog") }}
+                    {{ menu_item("photos", "photo_index", "Fotos") }}
                 </ul>
             </nav>
         </header>
