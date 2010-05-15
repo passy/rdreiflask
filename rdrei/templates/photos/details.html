@@ -10,9 +10,17 @@
     <h2>{{ title }}</h2>
 
     <nav>
-    <a {{ link_attr("photo_album", album_id=album.id) }} class="album">Zurück zum Album</a>
-        <a href="#next" class="next">Weiter</a>
-        <a href="#previous" class="prev">Zurück</a>
+        <a {{ link_attr("photo_album", album_id=album.id) }} class="album">Zurück zum Album</a>
+        {% if next_photo %}
+        <a {{ link_attr("photo_details", album_id=album.id, photo_id=next_photo.id) }} class="next">Weiter</a>
+        {% else %}
+        <span class="next disabled">Weiter</span>
+        {% endif %}
+        {% if prev_photo %}
+        <a {{ link_attr("photo_details", album_id=album.id, photo_id=prev_photo.id) }} class="prev">Zurück</a>
+        {% else %}
+        <span class="prev disabled">Zurück</span>
+        {% endif %}
     </nav>
     <div class="photo-container">
         <div>

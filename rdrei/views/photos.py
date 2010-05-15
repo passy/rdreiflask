@@ -9,6 +9,7 @@ Photo related views.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
+from rdrei import settings
 from rdrei.application import app
 from rdrei.models import Photos, PhotoAlbums
 from rdrei.utils.template import render_template, templated
@@ -45,8 +46,18 @@ def photo_details(album_id, photo_id):
     if not all([album, photo]):
         raise NotFound("Either album or photo could not be found.")
 
+    prev_photo = album.previous_photo(photo_id)
+    next_photos = list(album.next_photos(photo_id,
+                                    settings.PHOTOS_PRELOAD_NEXT_COUNT))
+    if next_photos:
+        next_photo = next_photos[0]
+    else:
+        next_photo = None
+
     return {
         'photo': photo,
         'title': album.name + u' \u2014 ' + photo.title,
-        'album': album
+        'album': album,
+        'next_photo': next_photo,
+        'prev_photo': prev_photo
     }

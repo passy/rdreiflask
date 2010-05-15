@@ -123,12 +123,18 @@ class PhotoAlbum(BaseModel):
         """
 
         photos = list(self.photos)
-        index = photos.index(photo_id) + 1
+        index = photos.index(str(photo_id)) + 1
         upper_index = min(index + count, len(photos))
         element_ids = photos[index:upper_index]
 
         for id in element_ids:
             yield Photos.by_id(id)
+
+    def next_photo(self, photo_id):
+        try:
+            return self.next_photos(photo_id).next()
+        except StopIteration:
+            return None
 
 
     def previous_photos(self, photo_id, count=1):
@@ -137,13 +143,19 @@ class PhotoAlbum(BaseModel):
         """
 
         photos = list(self.photos)
-        index = photos.index(photo_id)
+        index = photos.index(str(photo_id))
         lower_index = max(0, index - count)
         element_ids = photos[lower_index:index]
         element_ids.reverse()
 
         for id in element_ids:
             yield Photos.by_id(id)
+
+    def previous_photo(self, photo_id):
+        try:
+            return self.previous_photos(photo_id).next()
+        except StopIteration:
+            return None
 
 
 class PhotoAlbums(object):
