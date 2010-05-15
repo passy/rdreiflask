@@ -26,7 +26,13 @@
         <div>
             <!-- The preview is usually in cache, so this helps. -->
             <img class="preview" src="{{ photo.url.small }}" alt="" />
+            {% if next_photo %}
+            <a class="next" {{ link_attr("photo_details", album_id=album.id, photo_id=next_photo.id) }}>
+                <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+            </a>
+            {% else %}
             <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+            {% endif %}
         </div>
     </div>
     <details>{{ photo.title }}</details>
