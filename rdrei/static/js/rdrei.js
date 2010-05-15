@@ -97,6 +97,18 @@ $.widget("rdrei.topMenu", {
             newTitle = that.options.titlePrefix + 
                 that.options.defaultTitle;
 
+            if (that.options.slideEffect) {
+                that._log("Showing content with slide effect.");
+                $endpoint.show('slide', {
+                    direction: direction
+                }, function () {
+                    that._trigger('content-visible');
+                });
+            } else {
+                that._trigger('content-visible');
+            }
+
+
             if (color) {
                 $("body").colorChanger(color);
             }
@@ -105,12 +117,6 @@ $.widget("rdrei.topMenu", {
             }
             // $.address.title is useless.
             window.document.title = newTitle;
-
-            if (that.options.slideEffect) {
-                $endpoint.show('slide', {
-                    direction: direction
-                });
-            }
 
             that._trigger('loaded');
         }
@@ -166,19 +172,20 @@ $.fn.colorChanger = function (color, options) {
     var settings = $.extend({}, options, {
         duration: 5000
     }),
-        that = this,
         previousColor = this.data('color');
 
-    // Remove previously applied color.
-    if (previousColor) {
-        that.removeClass(previousColor);
-    }
-
     if (Modernizr.cssanimations) {
+        // Remove previously applied color.
+        if (previousColor) {
+            this.removeClass(previousColor);
+        }
         this.addClass(color);
     } else {
+        if (previousColor) {
+            this.removeClass(previousColor);
+        }
         // Reset previous animation. Won't look too good, I guess. \:
-        this.stop().attr('style', '').addClass(color, settings.duration);
+        this.addClass(color, settings.duration / 2);
     }
 
     // Save the currently applied color.
@@ -191,6 +198,7 @@ $(document).ready(function () {
     $("header nav").topMenu({
         loaded: function () {
             // Enable fancy effects after the first load.
+            // Unfortunately, this is horrible in firefox.
             $(this).topMenu('option', 'slideEffect', true);
         }
     });
