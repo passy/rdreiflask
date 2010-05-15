@@ -5,13 +5,15 @@
 {%- endmacro -%}
 
 {% macro make_menu_item(slug, endpoint, title) %}
-<li><a{% if slug == menu_item %} class="active"{% endif %} href="{{ url_for(endpoint) }}">{{ title }}</a></li>
+{% set url=url_for(endpoint) %}
+<li><a{% if slug == menu_item %} class="active"{% endif %} href="{{ url }}" rel="address:{{ url }}">{{ title }}</a></li>
 {% endmacro %}
 
 <html>
     <head>
-        <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>rdrei.net — {% block title %}Pascal Hartig{% endblock %}</title>
+        <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
         <link rel="icon" href="{{ url_for("static", filename="img/favicon_large.png") }}" type="image/png" />
     </head>
     <body{{ get_body_class() }}>
@@ -25,7 +27,7 @@
                 </ul>
             </nav>
         </header>
-        <section id="content" id="ajax-endpoint">
+        <section id="content">
             <div id="ajax-endpoint">
                 {% block content %}Loading ...{% endblock %}
             </div>
