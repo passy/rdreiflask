@@ -84,6 +84,33 @@ $.widget("rdrei.topMenu", {
         }
     },
 
+    _showContent: function (data, direction) {
+        var $endpoint = $(this.options.target).html(data),
+            $wrapper = $endpoint.children(1),
+            color = $wrapper.attr("data-color"),
+            title = $wrapper.attr("data-title"),
+            newTitle = this.options.titlePrefix + 
+                this.options.defaultTitle;
+
+            this._log("Loaded content.");
+
+            if (color) {
+                $("body").colorChanger(color);
+            }
+            if (title) {
+                newTitle = this.options.titlePrefix + title;
+            }
+            // $.address.title is useless.
+            window.document.title = newTitle;
+
+            if (this.options.slideEffect) {
+                $endpoint.show('slide', {
+                    direction: direction
+                });
+            }
+            this._trigger('loaded', 0);
+    },
+
     _onChange: function (event) {
         var $endpoint = $(this.options.target),
             url = event.path + "?ajax",
@@ -92,8 +119,6 @@ $.widget("rdrei.topMenu", {
             fromRight,
             direction;
 
-        this._log("Loading url ", url);
-
         fromRight = that._activate(event.value);
         direction = fromRight ? 'right' : 'left';
 
@@ -101,30 +126,13 @@ $.widget("rdrei.topMenu", {
             $endpoint.hide('slide', {direction: direction})
         }
 
-        $endpoint.load(url, function () {
+        this._log("Loading url ", url);
+        $.get(url, function (data) {
             // Check for colors.
-            var $wrapper = $endpoint.children(1),
-                color = $wrapper.attr("data-color"),
-                title = $wrapper.attr("data-title"),
-                direction = fromRight ? 'left' : 'right',
-                newTitle = that.options.titlePrefix + 
-                    that.options.defaultTitle;
+            var direction = fromRight ? 'left' : 'right';
 
-            if (color) {
-                $("body").colorChanger(color);
-            }
-            if (title) {
-                newTitle = that.options.titlePrefix + title;
-            }
-            // $.address.title is useless.
-            window.document.title = newTitle;
-
-            if (that.options.slideEffect) {
-                $endpoint.show('slide', {
-                    direction: direction
-                });
-            }
-            that._trigger('loaded', 0);
+            that._log("Content received.");
+            that._showContent(data);
         });
     }
 });
