@@ -85,30 +85,47 @@ $.widget("rdrei.topMenu", {
     },
 
     _showContent: function (data, direction) {
-        var $endpoint = $(this.options.target).html(data),
-            $wrapper = $endpoint.children(1),
+        var $endpoint = $(this.options.target),
+            that = this;
+
+        function replace() {
+            $endpoint.html(data);
+
+            var $wrapper = $endpoint.children(1),
             color = $wrapper.attr("data-color"),
             title = $wrapper.attr("data-title"),
-            newTitle = this.options.titlePrefix + 
-                this.options.defaultTitle;
-
-            this._log("Loaded content.");
+            newTitle = that.options.titlePrefix + 
+                that.options.defaultTitle;
 
             if (color) {
                 $("body").colorChanger(color);
             }
             if (title) {
-                newTitle = this.options.titlePrefix + title;
+                newTitle = that.options.titlePrefix + title;
             }
             // $.address.title is useless.
             window.document.title = newTitle;
 
-            if (this.options.slideEffect) {
+            if (that.options.slideEffect) {
                 $endpoint.show('slide', {
                     direction: direction
                 });
             }
-            this._trigger('loaded', 0);
+
+            that._trigger('loaded');
+        }
+
+        if (!this.options.slideEffect || this._slidedOut) {
+            // Replace right now.
+            this._log("Instantly replacing content.");
+            replace();
+        } else {
+            // Not slided out yet, load later.
+            $endpoint.one('slided-out', function () {
+                that._log("Delayed replacing of content.");
+                replace();
+            });
+        }
     },
 
     _onChange: function (event) {
@@ -123,7 +140,11 @@ $.widget("rdrei.topMenu", {
         direction = fromRight ? 'right' : 'left';
 
         if (this.options.slideEffect) {
-            $endpoint.hide('slide', {direction: direction})
+            this._slidedOut = false;
+            $endpoint.hide('slide', {direction: direction}, function () {
+                this._slidedOut = true;
+                $(this).trigger('slided-out');
+            });
         }
 
         this._log("Loading url ", url);
@@ -132,7 +153,7 @@ $.widget("rdrei.topMenu", {
             var direction = fromRight ? 'left' : 'right';
 
             that._log("Content received.");
-            that._showContent(data);
+            that._showContent(data, direction);
         });
     }
 });
