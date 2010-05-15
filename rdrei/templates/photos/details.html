@@ -14,10 +14,13 @@
         <a href="#previous" class="prev">Zurück</a>
     </nav>
     <div class="photo-container">
-        <!-- The preview is usually in cache, so this helps. -->
-        <img class="preview" src="{{ photo.url.small }}" alt="" />
-        <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+        <div>
+            <!-- The preview is usually in cache, so this helps. -->
+            <img class="preview" src="{{ photo.url.small }}" alt="" />
+            <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+        </div>
     </div>
     <summary>{{ photo.title }}</summary>
 </div>
+<script src="http://rdrei.disqus.com/embed.js" type="text/javascript" async="async"></script>
 {% endblock %}

@@ -73,7 +73,6 @@
 
   .photo-container
     height: $photo_height
-    position: relative
     text-align: center
     padding: 20px
     background: rgba(255, 255, 255, 0.3)
@@ -82,13 +81,18 @@
       top: 1px solid white
       bottom: 1px solid white
 
+    div
+      width: $photo_width
+      position: relative
+      margin: 0 auto
+
     img
       position: absolute
-      margin: auto
+      top: 0
+      left: 0
 
       width: $photo_width
       height: inherit
-      margin-left: -1 * ($photo_width / 2)
 
       &.photo
         z-index: 2
