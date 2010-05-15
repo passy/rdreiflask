@@ -1,4 +1,5 @@
 {% extends template_base %}
+{% from "macros.html" import link_attr %}
 {% set menu_item="photos" %}
 {% set body_class="ltblue" %}
 
@@ -9,7 +10,7 @@
     <ul class="photo-gallery polaroid">
     {% for photo in photos %}
         <li>
-        <a href="{{ url_for('photo_details', photo_id=photo.id, album_id=album['id']) }}" title="{{ photo.title }}">
+        <a {{ link_attr('photo_details', photo_id=photo.id, album_id=album['id']) }} title="{{ photo.title }}">
             <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
         </a>
         </li>

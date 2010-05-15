@@ -1,0 +1,4 @@
+{%- macro link_attr(endpoint) -%}
+    {% set link = url_for(endpoint, **kwargs) -%}
+    href="{{ link }}" rel="address:{{ link }}"
+{%- endmacro -%}

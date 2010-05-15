@@ -210,7 +210,7 @@
                     } else {
                         _si(_listen, 50);
                     }
-                    $('a').filter('[rel*=address:]').address();
+                    $('a[rel*=address:]').address();
                 }
             },
             _unload = function() {

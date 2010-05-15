@@ -1,4 +1,5 @@
 {% extends template_base %}
+{% from "macros.html" import link_attr %}
 {% set menu_item = "photos" %}
 {% set body_class = "ltblue" %}
 {% block title %}{{ title }}{% endblock %}
@@ -9,7 +10,7 @@
     <h2>{{ title }}</h2>
 
     <nav>
-        <a href="#album" class="album">Zurück zum Album</a>
+    <a {{ link_attr("photo_album", album_id=album['id']) }} class="album">Zurück zum Album</a>
         <a href="#next" class="next">Weiter</a>
         <a href="#previous" class="prev">Zurück</a>
     </nav>
