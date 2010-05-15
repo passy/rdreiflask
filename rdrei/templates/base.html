@@ -12,6 +12,7 @@
     <head>
         <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
         <title>rdrei.net — {% block title %}Pascal Hartig{% endblock %}</title>
+        <link rel="icon" href="{{ url_for("static", filename="img/favicon_large.png") }}" type="image/png" />
     </head>
     <body{{ get_body_class() }}>
         <header>
