@@ -21,6 +21,13 @@
         </div>
     </div>
     <details>{{ photo.title }}</details>
+    <div id="disqus_thread"></div>
 </div>
-<script src="http://rdrei.disqus.com/embed.js" type="text/javascript" async="async"></script>
+<script type="text/javascript">
+    window.disqus_developer = 1;
+    window.disqus_identifier = "photo:{{ photo.id }}";
+    $(document).ready(function () {
+        $.getScript("http://rdrei.disqus.com/embed.js");
+    });
+</script>
 {% endblock %}
