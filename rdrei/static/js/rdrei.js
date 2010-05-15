@@ -143,6 +143,12 @@ $.widget("rdrei.topMenu", {
             direction;
 
         fromRight = that._activate(event.value);
+        // You can override the sliding direction by the _slide url parameter.
+        if ('_slide' in event.parameters && 
+            event.parameters._slide === "right") {
+            fromRight = true;
+        }
+
         direction = fromRight ? 'right' : 'left';
 
         if (this.options.slideEffect) {

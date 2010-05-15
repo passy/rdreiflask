@@ -17,7 +17,7 @@
         <span class="next disabled">Weiter</span>
         {% endif %}
         {% if prev_photo %}
-        <a {{ link_attr("photo_details", album_id=album.id, photo_id=prev_photo.id) }} class="prev">Zurück</a>
+        <a {{ link_attr("photo_details", album_id=album.id, photo_id=prev_photo.id, _slide="right") }} class="prev">Zurück</a>
         {% else %}
         <span class="prev disabled">Zurück</span>
         {% endif %}
