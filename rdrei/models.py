@@ -10,6 +10,7 @@ Model-ish adapters for the redis store.
 """
 
 from flask import g
+from rdrei import settings
 
 class FlickrURL(object):
     """Converts a photo to a URL."""
@@ -23,8 +24,6 @@ class FlickrURL(object):
         'original': '_o'
     }
 
-    _BASE_URL = "http://static.flickr.com/"
-
     def __init__(self, photo):
         self.photo = photo
 
@@ -35,8 +34,8 @@ class FlickrURL(object):
         url = photo.url.thumb
         """
         if method in self._SIZE_MAPPING:
-            return "{base_url}/{server}/{id}_{secret}{size}.jpg".format(
-                base_url=self._BASE_URL,
+            return "http://farm{farm_id}.static.flickr.com/{server}/{id}_{secret}{size}.jpg".format(
+                farm_id=self.photo.farm,
                 server=self.photo.server,
                 id=self.photo.id,
                 secret=self.photo.secret,
@@ -44,6 +43,15 @@ class FlickrURL(object):
             )
         else:
             return object.__getattr__(method)
+
+    @property
+    def details(self):
+        """Returns the details url for the photo."""
+
+        return "http://flickr.com/photos/{username}/{photo_id}/".format(
+            username=settings.FLICKR_USER_NAME,
+            photo_id=self.photo.id
+        )
 
 
 class Photo(object):
@@ -63,7 +71,7 @@ class Photo(object):
         # Create the url object on the fly.
         return FlickrURL(self)
 
-    def __str__(self):
+    def __repr__(self):
         return '<Photo(id={0}, title="{1}")>'.format(
             self.id,
             self.title
@@ -109,7 +117,9 @@ class PhotoAlbums(object):
         if attribute:
             return g.db.hget(key, attribute)
         else:
-            return g.db.hgetall(key)
+            album = g.db.hgetall(key)
+            album['id'] = id
+            return album
 
     @staticmethod
     def all(offset=1, limit=None, attribute=None):

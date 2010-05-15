@@ -1,19 +1,21 @@
 {% extends template_base %}
 {% set menu_item="photos" %}
 {% set body_class="ltblue" %}
+{% set title="Fotoübersicht" %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="wrapper" data-color="ltblue">
+<div class="wrapper" data-color="ltblue" data-title="{{ title }}">
     <h2>Photos</h2>
 
     <ul>
     {% for album in albums %}
-    <li><a href="{{ url_for('photo_details', album_id=album['id']) }}">{{ album['name'] }}</a></li>
+    <li><a href="{{ url_for('photo_album', album_id=album['id']) }}">{{ album['name'] }} (Tag: {{ album['tag'] }})</a></li>
     {% endfor %}
     </ul>
-    <ul class="photo-gallery">
+    <ul class="photo-gallery watercolor">
         {% for album in range(16) %}
-        <li class="watercolor">
+        <li>
             <a href="#">
                 <em>Album Title</em>
                 <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Album Title" />

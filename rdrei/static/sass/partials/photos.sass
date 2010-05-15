@@ -55,9 +55,58 @@
 
           img
             margin-bottom: 10px
+            min:
+              height: 180px
+              width: 240px
 
         &:hover
           background: #fff
 
       img
         display: block
+
+// ID of the wrapper containing the details page
+#photo-details
+
+  $photo_width: 500px
+  $photo_height: 375px
+
+  .photo-container
+    height: $photo_height
+    position: relative
+    text-align: center
+    padding: 20px
+    background: rgba(255, 255, 255, 0.3)
+
+    border:
+      top: 1px solid white
+      bottom: 1px solid white
+
+    img
+      position: absolute
+      margin: auto
+
+      width: $photo_width
+      height: inherit
+      margin-left: -1 * ($photo_width / 2)
+
+      &.photo
+        z-index: 2
+
+      &.preview
+        z-index: 1
+
+  summary
+    display: block
+    text-align: center
+
+  nav
+    margin-bottom: 5px
+    overflow: hidden
+
+    .album      
+      float: left
+
+    .next, .prev
+      float: right
+      margin-left: 10px

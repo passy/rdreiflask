@@ -1,19 +1,23 @@
 {% extends template_base %}
-{% set menu_item="photos" %}
-{% set body_class="ltblue" %}
+{% set menu_item = "photos" %}
+{% set body_class = "ltblue" %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="wrapper" data-color="ltblue">
-    <h2>Album: {{ album['name'] }}</h2>
+<div id="photo-details" class="wrapper" data-color="ltblue" data-title="{{ title }}">
 
-    <ul class="photo-gallery polaroid">
-    {% for photo in photos %}
-        <li>
-        <a href="{{ photo.url.large }}" title="{{ photo.title }}">
-            <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
-        </a>
-        </li>
-    {% endfor %}
-    </ul>
+    <h2>{{ title }}</h2>
+
+    <nav>
+        <a href="#album" class="album">Zurück zum Album</a>
+        <a href="#next" class="next">Weiter</a>
+        <a href="#previous" class="prev">Zurück</a>
+    </nav>
+    <div class="photo-container">
+        <!-- The preview is usually in cache, so this helps. -->
+        <img class="preview" src="{{ photo.url.small }}" alt="" />
+        <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+    </div>
+    <summary>{{ photo.title }}</summary>
 </div>
 {% endblock %}

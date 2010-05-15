@@ -1,0 +1,19 @@
+{% extends template_base %}
+{% set menu_item="photos" %}
+{% set body_class="ltblue" %}
+
+{% block content %}
+<div class="wrapper" data-color="ltblue">
+    <h2>Album: {{ album['name'] }}</h2>
+
+    <ul class="photo-gallery polaroid">
+    {% for photo in photos %}
+        <li>
+        <a href="{{ url_for('photo_details', photo_id=photo.id, album_id=album['id']) }}" title="{{ photo.title }}">
+            <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
+        </a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
