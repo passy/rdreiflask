@@ -42,11 +42,11 @@ def photo_details(album_id, photo_id):
     album = PhotoAlbums.by_id(album_id)
     photo = Photos.by_id(photo_id)
 
-    if not any([album, photo]):
+    if not all([album, photo]):
         raise NotFound("Either album or photo could not be found.")
 
     return {
         'photo': photo,
-        'title': album['name'] + u' \u2014 ' + photo.title,
+        'title': album.name + u' \u2014 ' + photo.title,
         'album': album
     }

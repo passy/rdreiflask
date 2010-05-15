@@ -11,6 +11,7 @@ Model-ish adapters for the redis store.
 
 from flask import g
 from rdrei import settings
+from werkzeug.utils import cached_property
 
 class FlickrURL(object):
     """Converts a photo to a URL."""
@@ -54,17 +55,20 @@ class FlickrURL(object):
         )
 
 
-class Photo(object):
+class BaseModel(object):
+    """Base for all models."""
+
+    def __init__(self, data):
+        self.__dict__ = data
+
+    def __len(self):
+        return len(self.__dict__)
+
+
+class Photo(BaseModel):
     """
     Object representation of a photo.
     """
-
-    def __init__(self, data):
-        self.id = data['id']
-        self.title = data['title']
-        self.farm = data['farm']
-        self.server = data['server']
-        self.secret = data['secret']
 
     @property
     def url(self):
@@ -103,6 +107,45 @@ class Photos(object):
         return g.db.smembers('phototags')
 
 
+class PhotoAlbum(BaseModel):
+    """
+    Object representation of a single album.
+    """
+
+    @cached_property
+    def photos(self):
+        return g.db.smembers("phototags:" + self.tag)
+
+    def next_photos(self, photo_id, count=1):
+        """
+        Returns the next ``count`` photo elements after the photo identified
+        by ``photo_id``.
+        """
+
+        photos = list(self.photos)
+        index = photos.index(photo_id) + 1
+        upper_index = min(index + count, len(photos))
+        element_ids = photos[index:upper_index]
+
+        for id in element_ids:
+            yield Photos.by_id(id)
+
+
+    def previous_photos(self, photo_id, count=1):
+        """
+        See :meth:``next``.
+        """
+
+        photos = list(self.photos)
+        index = photos.index(photo_id)
+        lower_index = max(0, index - count)
+        element_ids = photos[lower_index:index]
+        element_ids.reverse()
+
+        for id in element_ids:
+            yield Photos.by_id(id)
+
+
 class PhotoAlbums(object):
     """
     Access to photo albums.
@@ -119,7 +162,7 @@ class PhotoAlbums(object):
         else:
             album = g.db.hgetall(key)
             album['id'] = id
-            return album
+            return PhotoAlbum(album)
 
     @staticmethod
     def all(offset=1, limit=None, attribute=None):
@@ -142,4 +185,4 @@ class PhotoAlbums(object):
 
             # Make sure, we're not yielding a deleted entry.
             if result:
-                yield result
+                yield PhotoAlbum(result)

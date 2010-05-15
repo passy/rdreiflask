@@ -10,7 +10,7 @@ def test_api():
     client = flickr.FlickrClient(FLICKR_API_KEY)
 
     result = client.flickr_people_getInfo(user_id=TEST_USER_ID)
-    eq_(result['person']['username']['_content'], 'Cravior')
+    eq_(result['person']['username']['_content'], 'rdrei')
 
 def test_recent():
     photo_counter = 0
