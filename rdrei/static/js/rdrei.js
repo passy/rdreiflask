@@ -41,7 +41,7 @@ $.widget("rdrei.topMenu", {
 
         $.address.crawlable(this.options.crawlable);
         // Globally enabled.
-        $("a").address();
+        $("a[href]:not([href^=http])").address();
         // Save the initial color.
         this._init_colorchanger();
         $.address.internalChange(function (event) {
