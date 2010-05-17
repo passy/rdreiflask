@@ -199,6 +199,16 @@ $.fn.colorChanger = function (color, options) {
     return this;
 };
 
+$.fn.loadDisqus = function (url) {
+    var $iframe = $("<iframe />", {
+        'src': url,
+        'id': "disqus-frame"
+    }).appendTo(this);
+    $iframe.animate({
+        minHeight: 500
+    }, 2000);
+};
+
 $(document).ready(function () {
     $("header nav").topMenu({
         loaded: function () {

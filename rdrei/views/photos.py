@@ -13,7 +13,7 @@ from rdrei import settings
 from rdrei.application import app
 from rdrei.models import Photos, PhotoAlbums
 from rdrei.utils.template import render_template, templated
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, BadRequest
 
 
 @app.route("/photos")
@@ -60,4 +60,24 @@ def photo_details(album_id, photo_id):
         'album': album,
         'next_photo': next_photo,
         'prev_photo': prev_photo
+    }
+
+@app.route("/photos/comments/<int:album_id>/<int:photo_id>")
+@templated("photos/comments.html")
+def photo_comments(album_id, photo_id):
+    """
+    Allows comment loading in an iframe for the given ``album_id`` and
+    ``photo_id``.
+    """
+
+    # Verification that the entry exists should be not required.
+    try:
+        album_id = int(album_id)
+        photo_id = int(photo_id)
+    except (ValueError, TypeError):
+        raise BadRequest
+
+    return {
+        'album_id': album_id,
+        'photo_id': photo_id
     }

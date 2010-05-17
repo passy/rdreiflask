@@ -36,23 +36,13 @@
         </div>
     </div>
     <details>{{ photo.title }}</details>
-    <div id="disqus_thread">
-        <a href="#" id="show-comments">Kommentare anzeigen</a>
-    </div>
+    <a href="#" id="show-comments">Kommentare anzeigen</a>
+    <div id="disqus-thread"></div>
     <script type="text/javascript">
-        $("header nav").one('topmenucontent-visible', function () {
+        $(function () {
             $("#show-comments").click(function () {
-                window.disqus_developer = 1;
-                window.disqus_identifier = "photo:{{ photo.id }}";
-                window.disqus_url = "{{ url_for('photo_details', album_id=album.id, photo_id=photo.id, _external=True) }}";
-                if (window.DISQUS !== undefined) {
-                    DISQUS.config.page.identifier = window.disqus_identifier;
-                    DISQUS.config.page.url = window.disqus_url;
-                    DISQUS.startLoading();
-                } else {
-                    $.getScript("http://rdrei.disqus.com/embed.js", {cache: false});
-                }
-
+                $("#disqus-thread").loadDisqus("{{ url_for('photo_comments', album_id=album.id, photo_id=photo.id) }}");
+                $(this).hide();
                 return false;
             });
         });
