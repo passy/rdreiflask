@@ -6,8 +6,7 @@
  * ==========
  * 
  *  - Hash fragment is appended on initial page load.
- *  - Clicking on 'Home' menu entry scrolls to top of the page.
- *  - Fast loading might replace site content before it's slided out.
+ *  - Memory leak in combination with disqus.
  *
  * :copyright: date, Pascal Hartig <phartig@rdrei.net>
  * :license: GPL v3, see doc/LICENSE for more details.
