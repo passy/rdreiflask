@@ -225,4 +225,14 @@ $(document).ready(function () {
     }).ajaxError(function () {
         alert("An error occured. Please check your network settings.");
     });
+
+    // Initialize notify
+    $("#notify-container").notify();
+    // Check for previously printed notifications.
+    $("#global-flash li").each(function () {
+        $("#notify-container").notify("create", {
+            title: "Benachrichtigung",
+            text: $(this).text()
+        });
+    });
 });

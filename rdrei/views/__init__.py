@@ -25,3 +25,4 @@ def blog_index():
 
 
 import rdrei.views.photos
+import rdrei.views.admin

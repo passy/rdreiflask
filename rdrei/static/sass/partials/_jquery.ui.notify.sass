@@ -1,0 +1,56 @@
+@import mixins
+@import "compass/css3/box-shadow"
+@import "compass/css3/border-radius"
+
+.ui-notify
+  width: 350px
+  position: fixed
+  top: 50px
+  right: 10px
+
+.ui-notify-message
+  +border-radius(5px)
+  +box-shadow(1px, 1px, 5px, rgba(0, 0, 0, 0.3))
+  +text-shadow(0, 1px, 0, #333)
+
+  padding: 10px
+  margin-bottom: 15px
+  background: #000
+  background: rgba(0, 0, 0, 0.5)
+  &:last-child
+    margin-bottom: 0
+
+  .title
+    color: #fff
+    font-size: 14px
+    font-weight: bold
+    margin: 0
+    padding: 0
+  p
+    color: #fff
+    margin: 3px 0
+    padding: 0
+    line-height: 18px
+
+.ui-notify-close
+  color: #fff
+  text-decoration: underline
+
+.ui-notify-click
+  cursor: pointer
+
+.ui-notify-cross
+  +nostyle-link
+  margin-top: -4px
+  float: right
+  cursor: pointer
+  text-decoration: none
+  font-size: 12px
+  font-weight: bold
+  text-shadow: 0 1px 1px #fff
+  padding: 2px
+  &:hover
+    color: #ffffab
+  &:active
+    position: relative
+    top: 1px
