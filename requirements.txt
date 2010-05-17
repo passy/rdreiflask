@@ -1,4 +1,5 @@
 jinja2
 werkzeug
 flask
+disqus-api-client
 git+http://github.com/andymccurdy/redis-py.git#egg=redis
