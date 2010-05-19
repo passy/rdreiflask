@@ -31,9 +31,9 @@ def _check_login():
     """
 
     if session.get('twitter_user', None) in settings.ADMIN_USERS:
-        g.authorized = True
+        g.is_admin = True
     else:
-        g.authorized = False
+        g.is_admin = False
 
 
 @app.after_request

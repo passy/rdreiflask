@@ -98,10 +98,11 @@ author
   font-style: italic
 
 #content
-  +border-radius(15px)
+  +border-radius($CONTENT_BOX_RADIUS)
   +box-shadow(1px, 1px, 5px, rgba(0, 0, 0, 0.3))
   +centered
   +box-sizing(padding-box)
+  position: relative
   width: 600px
   min-height: 500px
   background: rgba(255, 255, 255, 0.6)
@@ -125,6 +126,7 @@ author
   display: none
 
 @import partials/photos
+@import partials/admin
 @import partials/jquery.ui.notify
 
 //  vim: set ts=8 sw=2 tw=0 ft=sass: 

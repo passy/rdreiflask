@@ -230,9 +230,12 @@ $(document).ready(function () {
     $("#notify-container").notify();
     // Check for previously printed notifications.
     $("#global-flash li").each(function () {
-        $("#notify-container").notify("create", {
-            title: "Benachrichtigung",
-            text: $(this).text()
-        });
+        var text = $(this).text();
+        if (text) {
+            $("#notify-container").notify("create", {
+                title: "Benachrichtigung",
+                text: $(this).text()
+            });
+        }
     });
 });

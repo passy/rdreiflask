@@ -29,8 +29,10 @@
             <ul id="global-flash">
                 {% for msg in get_flashed_messages() %}
                     <li>{{ msg }}</li>
+                {% else %}
+                    <li></li>
                 {% endfor %}
-            </li>
+            </ul>
         </header>
         <section id="content">
             <div id="ajax-endpoint">
@@ -49,6 +51,9 @@
         <script src="{{ url_for("static", filename="js/jquery.address.js") }}" type="text/javascript"></script>
         <script src="{{ url_for("static", filename="js/jquery.notify.js") }}" type="text/javascript"></script>
         <script src="{{ url_for("static", filename="js/rdrei.js") }}" type="text/javascript"></script>
+        {% if g.is_admin %}
+            <script src="{{ url_for("static", filename="js/rdrei_admin.js") }}" type="text/javascript"></script>
+        {% endif %}
         {% endblock %}
     </body>
 </html>
