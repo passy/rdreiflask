@@ -9,6 +9,9 @@ Configuration file.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
+SECRET_KEY = "supersecretunguessablekey"
+DEBUG = False
+
 REDIS_HOST = "localhost"
 REDIS_PORT = 6379
 REDIS_DB = 0

@@ -13,8 +13,8 @@ from flask import Flask, g, session
 from rdrei import settings
 
 app = Flask(__name__)
-app.secret_key = settings.SECRET_KEY
 app.debug = settings.DEBUG
+app.secret_key = settings.SECRET_KEY
 
 from rdrei.utils import redis_db
 
