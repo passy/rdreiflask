@@ -9,7 +9,7 @@
 <div class="wrapper" data-color="ltblue" data-title="{{ title }}">
     {% if g.is_admin %}
     <section class="admin-corner">
-        <a href="#">Neues Album</a>
+    <a {{ link_attr('admin_photo') }}>Neues Album</a>
     </section>
     {% endif %}
     <h2>Photos</h2>
@@ -18,7 +18,7 @@
         {% for album in albums %}
         <li>
             <a {{ link_attr('photo_album', album_id=album.id) }}>
-                <em>{{ album['name'] }}</em>
+                <em>{{ album.title }}</em>
                 <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Cover picture" />
             </a>
         </li>

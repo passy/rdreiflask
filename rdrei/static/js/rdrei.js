@@ -5,8 +5,7 @@
  * Known Bugs
  * ==========
  * 
- *  - Hash fragment is appended on initial page load.
- *  - Memory leak in combination with disqus.
+ * - Home does not load if you start from a different entry point.
  *
  * :copyright: date, Pascal Hartig <phartig@rdrei.net>
  * :license: GPL v3, see doc/LICENSE for more details.
@@ -36,22 +35,23 @@ $.widget("rdrei.topMenu", {
     },
 
     _create: function () {
-        var that = this;
+        var that = this,
+            loaded = false;
 
         $.address.crawlable(this.options.crawlable);
         // Globally enabled.
         $().address();
         // Save the initial color.
         this._init_colorchanger();
-        $.address.internalChange(function (event) {
-            that._onChange(event);
-        });
-        $.address.externalChange(function (event) {
-            // Take care of the initial change.
-            if (window.location.pathname != '/' && event.path === '/') {
-                $.address.value(window.location.pathname);
-            } else {
+        $.address.init(function (event) {
+            if (event.value != '/') {
+                loaded = true;
+            }
+        }).change(function (event) {
+            if (loaded) {
                 that._onChange(event);
+            } else {
+                loaded = true;
             }
         });
         this._log("Initialized address topMenu content loader.");
@@ -210,13 +210,7 @@ $.fn.loadDisqus = function (url) {
 };
 
 $(document).ready(function () {
-    $("header nav").topMenu({
-        loaded: function () {
-            // Enable fancy effects after the first load.
-            // Unfortunately, this is horrible in firefox.
-            $(this).topMenu('option', 'slideEffect', true);
-        }
-    });
+    $("header nav").topMenu();
     // Show the loading indicator
     $("#loading").ajaxStart(function () {
         $(this).show();

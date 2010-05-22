@@ -61,7 +61,31 @@ class BaseModel(object):
     def __init__(self, data):
         self.__dict__ = data
 
-    def __len(self):
+    def get_key(self):
+        """Returns a key for the current entry."""
+
+        return ":".join([self.__prefix__, str(self.id)])
+
+    def _save_hash(self):
+        """Saves all data to redis. Naive implementation."""
+
+        if 'id' not in self.__dict__:
+            # Create a new id.
+            self.id = g.db.incr("photoalbum")
+
+        return self._save_existing_hash()
+
+    def _save_existing_hash(self):
+        """Update an existing hash entry."""
+        for key, value in self.__dict__.iteritems():
+            if key == 'id':
+                continue
+            if not g.db.hset(self.get_key(), key, value):
+                return False
+
+        return True
+
+    def __len__(self):
         return len(self.__dict__)
 
 
@@ -112,6 +136,8 @@ class PhotoAlbum(BaseModel):
     Object representation of a single album.
     """
 
+    __prefix__ = "photoalbum"
+
     @cached_property
     def photos(self):
         return g.db.smembers("phototags:" + self.tag)
@@ -157,6 +183,8 @@ class PhotoAlbum(BaseModel):
         except StopIteration:
             return None
 
+    def save(self):
+        return self._save_hash()
 
 class PhotoAlbums(object):
     """
@@ -173,8 +201,9 @@ class PhotoAlbums(object):
             return g.db.hget(key, attribute)
         else:
             album = g.db.hgetall(key)
-            album['id'] = id
-            return PhotoAlbum(album)
+            if album is not None:
+                album['id'] = id
+                return PhotoAlbum(album)
 
     @staticmethod
     def all(offset=1, limit=None, attribute=None):

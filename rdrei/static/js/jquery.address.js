@@ -131,17 +131,19 @@
             _load = function() {
                 if (!_loaded) {
                     _loaded = TRUE;
+                    var body = $('body').ajaxComplete(function() {
+                        _unescape.call(this);
+                    }).trigger('ajaxComplete');
                     if (_opts.wrap) {
-                        var body = $('body');
-                            wrap = $('body > *')
-                                .wrapAll('<div style="padding:' + 
-                                    (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' + 
-                                    (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' + 
-                                    (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
-                                    (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
-                                .parent()
-                                .wrap('<div id="' + ID + '" style="height:100%; overflow:auto;' + 
-                                    (_safari ? (window.statusbar.visible && !/chrome/i.test(_agent) ? '' : ' resize:both;') : '') + '" />');
+                        var wrap = $('body > *')
+                            .wrapAll('<div style="padding:' + 
+                                (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' + 
+                                (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' + 
+                                (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
+                                (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
+                            .parent()
+                            .wrap('<div id="' + ID + '" style="height:100%; overflow:auto;' + 
+                                (_safari ? (window.statusbar.visible && !/chrome/i.test(_agent) ? '' : ' resize:both;') : '') + '" />');
                         $('html, body')
                             .css({
                                 height: '100%',
@@ -210,7 +212,8 @@
                     } else {
                         _si(_listen, 50);
                     }
-                    $('a[rel*=address:]').address();
+                    
+                    $('a').filter('[rel*=address:]').address();
                 }
             },
             _unload = function() {
@@ -218,6 +221,18 @@
                     _t.removeEventListener(HASH_CHANGE, _listen, false);
                 } else if (_t.detachEvent) {
                     _t.detachEvent('on' + HASH_CHANGE, _listen);
+                }
+            },
+            _unescape = function() {
+                var base = _l.pathname.replace(/\/$/, ''),
+                    fragment = '_escaped_fragment_';
+                if ($('body').html().indexOf(fragment) != -1) {
+                    $('a[href]:not([href^=http])', this).each(function() {
+                        var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
+                        if (href == '' || href.indexOf(fragment) != -1) {
+                            $(this).attr('href', '#' + decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
+                        }
+                    });
                 }
             },
             ID = 'jQueryAddress',
@@ -349,7 +364,7 @@
             },
             baseURL: function() {
                 var url = _l.href;
-                if (_hash() != '') {
+                if (url.indexOf('#') != -1) {
                     url = url.substr(0, url.indexOf('#'));
                 }
                 if (/\/$/.test(url)) {
@@ -512,14 +527,14 @@
                             v = [v];
                         }
                         if (n == name) {
-                            v = (value === null || value == '') ? [] : 
+                            v = (value === null || value === '') ? [] : 
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
                             params.push(n + '=' + v[j]);
                         }
                     }
-                    if ($.inArray(name, names) == -1 && value !== null && value != '') {
+                    if ($.inArray(name, names) == -1 && value !== null && value !== '') {
                         params.push(name + '=' + value);
                     }
                     this.queryString(params.join('&'));
@@ -594,15 +609,6 @@
                 $.address.value(value);
                 return false;
             }
-        });
-        return this;
-    };
-    
-    $.fn.crawlable = function() {
-        var base = top.location.pathname.replace(/\/$/, '');
-        $(this).each(function() {
-            var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
-            $(this).attr('href', '#' + decodeURIComponent(href.replace(/(.*)\?_escaped_fragment_=(.*)$/, '!$2')));
         });
         return this;
     };

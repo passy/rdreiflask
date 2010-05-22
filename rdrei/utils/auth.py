@@ -10,7 +10,7 @@ Authentication utils.
 """
 
 from functools import wraps
-from flask import request, g, redirect, home, flash
+from flask import request, g, redirect, flash, url_for
 
 
 def requires_admin(f):
@@ -21,6 +21,6 @@ def requires_admin(f):
             return f(*args, **kwargs)
 
         # TODO: i18n
-        flash("Du hast keine Berechtigung für diese Seite. Sorry!")
+        flash("Nothing to see here. Move along!")
         return redirect(url_for("home"))
     return decorated

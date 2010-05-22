@@ -38,14 +38,17 @@
     <details>{{ photo.title }}</details>
     <a href="#" id="show-comments">Kommentare anzeigen</a>
     <div id="disqus-thread"></div>
-    <script type="text/javascript">
-        $(function () {
-            $("#show-comments").click(function () {
-                $("#disqus-thread").loadDisqus("{{ url_for('photo_comments', album_id=album.id, photo_id=photo.id) }}");
-                $(this).hide();
-                return false;
-            });
-        });
-    </script>
 </div>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script type="text/javascript">
+$(function () {
+    $("#show-comments").click(function () {
+        $("#disqus-thread").loadDisqus("{{ url_for('photo_comments', album_id=album.id, photo_id=photo.id) }}");
+        $(this).hide();
+        return false;
+    });
+});
+</script>
 {% endblock %}

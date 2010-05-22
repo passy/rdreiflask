@@ -56,7 +56,7 @@ def photo_details(album_id, photo_id):
 
     return {
         'photo': photo,
-        'title': album.name + u' \u2014 ' + photo.title,
+        'title': album.title + u' \u2014 ' + photo.title,
         'album': album,
         'next_photo': next_photo,
         'prev_photo': prev_photo
