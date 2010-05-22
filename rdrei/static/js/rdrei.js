@@ -6,6 +6,7 @@
  * ==========
  * 
  * - Home does not load if you start from a different entry point.
+ * - Bouncing colors when using not cssanimation capable browsers.
  *
  * :copyright: date, Pascal Hartig <phartig@rdrei.net>
  * :license: GPL v3, see doc/LICENSE for more details.
@@ -29,7 +30,7 @@ $.widget("rdrei.topMenu", {
         crawlable: true,
         target: "#ajax-endpoint",
         activeClass: "active",
-        slideEffect: false,
+        slideEffect: true,
         titlePrefix: "rdrei.net \u2014 ",
         defaultTitle: "Pascal Hartig"
     },
@@ -95,6 +96,10 @@ $.widget("rdrei.topMenu", {
             title = $wrapper.attr("data-title"),
             newTitle = that.options.titlePrefix + 
                 that.options.defaultTitle;
+
+            // Enable ajax clicks.
+            $wrapper.find('a[rel^=address:]').address();
+            that._log("Reenabling address links");
 
             if (that.options.slideEffect) {
                 that._log("Showing content with slide effect.");
