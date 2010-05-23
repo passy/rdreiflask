@@ -13,17 +13,17 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>rdrei.net — {% block title %}Pascal Hartig{% endblock %}</title>
-        <link href="{{ url_for("static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
-        <link rel="icon" href="{{ url_for("static", filename="img/favicon_large.png") }}" type="image/png" />
+        <link href="{{ url_for(".static", filename="css/screen.css") }}" media="screen, projection" rel="stylesheet" type="text/css" />
+        <link rel="icon" href="{{ url_for(".static", filename="img/favicon_large.png") }}" type="image/png" />
     </head>
     <body{{ get_body_class() }}>
         <header>
             <h1>r3</h1>
             <nav id="main-nav">
                 <ul>
-                    {{ make_menu_item("home", "home", "Home") }}
-                    {{ make_menu_item("blog", "blog_index", "Blog") }}
-                    {{ make_menu_item("photos", "photo_index", "Fotos") }}
+                    {{ make_menu_item("home", ".home", "Home") }}
+                    {{ make_menu_item("blog", ".blog_index", "Blog") }}
+                    {{ make_menu_item("photos", "photos.index", "Fotos") }}
                 </ul>
             </nav>
             <ul id="global-flash">
@@ -44,7 +44,7 @@
             <ul>
                 {% if not g.is_admin %}
                 <li>
-                    <a href="{{ url_for("admin_login") }}">Admin</a>
+                    <a href="{{ url_for(".admin_login") }}">Admin</a>
                 </li>
                 {% endif %}
                 <li>
@@ -59,12 +59,12 @@
         {% block script %}
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
-        <script src="{{ url_for("static", filename="js/modernizr.js") }}" type="text/javascript"></script>
-        <script src="{{ url_for("static", filename="js/jquery.address.js") }}" type="text/javascript"></script>
-        <script src="{{ url_for("static", filename="js/jquery.notify.js") }}" type="text/javascript"></script>
-        <script src="{{ url_for("static", filename="js/rdrei.js") }}" type="text/javascript"></script>
+        <script src="{{ url_for(".static", filename="js/modernizr.js") }}" type="text/javascript"></script>
+        <script src="{{ url_for(".static", filename="js/jquery.address.js") }}" type="text/javascript"></script>
+        <script src="{{ url_for(".static", filename="js/jquery.notify.js") }}" type="text/javascript"></script>
+        <script src="{{ url_for(".static", filename="js/rdrei.js") }}" type="text/javascript"></script>
         {% if g.is_admin %}
-            <script src="{{ url_for("static", filename="js/rdrei_admin.js") }}" type="text/javascript"></script>
+            <script src="{{ url_for(".static", filename="js/rdrei_admin.js") }}" type="text/javascript"></script>
         {% endif %}
         {% endblock %}
     </body>

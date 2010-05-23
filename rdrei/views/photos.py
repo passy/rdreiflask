@@ -10,34 +10,36 @@ Photo related views.
 """
 
 from rdrei import settings
-from rdrei.application import app
 from rdrei.models import Photos, PhotoAlbums
 from rdrei.utils.template import render_template, templated
 from rdrei.utils.disqus_utils import get_num_posts_by_identifier
-from flask import g
+from flask import g, Module
 from werkzeug.exceptions import NotFound, BadRequest
 from disqus import APIError
 
 
-@app.route("/photos")
+photos = Module(__name__, url_prefix="/photos")
+
+
+@photos.route("/")
 @templated("photos/index.html")
-def photo_index():
+def index():
     albums = PhotoAlbums.all()
     return {'albums': albums}
 
 
-@app.route("/photos/album/<int:album_id>")
+@photos.route("/album/<int:album_id>")
 @templated("photos/album.html")
-def photo_album(album_id):
+def album(album_id):
 
     return {
         'photos': Photos.all_by_album(album_id),
         'album': PhotoAlbums.by_id(album_id)}
 
 
-@app.route("/photos/album/<int:album_id>/<int:photo_id>")
+@photos.route("/album/<int:album_id>/<int:photo_id>")
 @templated("photos/details.html")
-def photo_details(album_id, photo_id):
+def details(album_id, photo_id):
     """
     Shows display about a single photo. The ``album_id`` is used for
     next and previous photos as well as back links.
@@ -65,9 +67,9 @@ def photo_details(album_id, photo_id):
         'prev_photo': prev_photo}
 
 
-@app.route("/photos/comments/<int:album_id>/<int:photo_id>")
+@photos.route("/comments/<int:album_id>/<int:photo_id>")
 @templated("photos/comments.html")
-def photo_comments(album_id, photo_id):
+def comments(album_id, photo_id):
     """
     Allows comment loading in an iframe for the given ``album_id`` and
     ``photo_id``.
@@ -85,8 +87,8 @@ def photo_comments(album_id, photo_id):
         'photo_id': photo_id}
 
 
-@app.route("/photos/num_comments/<int:photo_id>")
-def photo_num_comments(photo_id):
+@photos.route("/num_comments/<int:photo_id>")
+def num_comments(photo_id):
     """
     Returns the number of comments for the given ``photo_id``.
     The results are cached with redis and have an expiration of five minutes.

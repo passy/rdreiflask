@@ -17,7 +17,9 @@ app.debug = settings.DEBUG
 app.secret_key = settings.SECRET_KEY
 
 from rdrei.utils import redis_db
+from rdrei.views.photos import photos
 
+app.register_module(photos)
 
 @app.before_request
 def _open_redis():
@@ -42,5 +44,3 @@ def _close_redis(response):
     g.db.connection.disconnect()
     return response
 
-
-import rdrei.views

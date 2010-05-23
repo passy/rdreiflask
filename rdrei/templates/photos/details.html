@@ -10,14 +10,14 @@
     <h2>{{ title }}</h2>
 
     <nav>
-        <a {{ link_attr("photo_album", album_id=album.id) }} class="album">Zurück zum Album</a>
+        <a {{ link_attr("album", album_id=album.id) }} class="album">Zurück zum Album</a>
         {% if next_photo %}
-        <a {{ link_attr("photo_details", album_id=album.id, photo_id=next_photo.id) }} class="next">Weiter</a>
+        <a {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }} class="next">Weiter</a>
         {% else %}
         <span class="next disabled">Weiter</span>
         {% endif %}
         {% if prev_photo %}
-        <a {{ link_attr("photo_details", album_id=album.id, photo_id=prev_photo.id, _slide="right") }} class="prev">Zurück</a>
+        <a {{ link_attr("details", album_id=album.id, photo_id=prev_photo.id, _slide="right") }} class="prev">Zurück</a>
         {% else %}
         <span class="prev disabled">Zurück</span>
         {% endif %}
@@ -27,7 +27,7 @@
             <!-- The preview is usually in cache, so this helps. -->
             <img class="preview" src="{{ photo.url.small }}" alt="" />
             {% if next_photo %}
-            <a class="next" {{ link_attr("photo_details", album_id=album.id, photo_id=next_photo.id) }}>
+            <a class="next" {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }}>
                 <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
             </a>
             {% else %}
@@ -45,11 +45,11 @@
 <script type="text/javascript">
 $(function () {
     $("#show-comments").click(function () {
-        $("#disqus-thread").loadDisqus("{{ url_for('photo_comments', album_id=album.id, photo_id=photo.id) }}");
+        $("#disqus-thread").loadDisqus("{{ url_for('comments', album_id=album.id, photo_id=photo.id) }}");
         $(this).hide();
         return false;
     });
-    $.get("{{ url_for('photo_num_comments', photo_id=photo.id) }}", function (data) {
+    $.get("{{ url_for('num_comments', photo_id=photo.id) }}", function (data) {
         var text = "Kommentar schreiben",
             num = parseInt(data);        
         if (num > 1) {

@@ -10,7 +10,7 @@
     <ul class="photo-gallery polaroid">
     {% for photo in photos %}
         <li>
-        <a {{ link_attr('photo_details', photo_id=photo.id, album_id=album['id']) }} title="{{ photo.title }}">
+        <a {{ link_attr('details', photo_id=photo.id, album_id=album['id']) }} title="{{ photo.title }}">
             <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
         </a>
         </li>
