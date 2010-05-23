@@ -40,7 +40,19 @@
             </div>
         </section>
         <footer>
-            &copy; 2010, Pascal Hartig, rdreinet solutions
+        <nav>
+            <ul>
+                {% if not g.is_admin %}
+                <li>
+                    <a href="{{ url_for("admin_login") }}">Admin</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="#">Impressum</a>
+                </li>
+            </ul>
+        </nav>
+        <p>&copy; 2010, Pascal Hartig, rdreinet solutions</p>
         </footer>
         {% include "_notify.html" %}
         <div id="loading">Loading &hellip;</div>
