@@ -20,19 +20,15 @@ setup(
     packages=(
         'rdrei',
         'rdrei.views',
-        'rdrei.utils
-    ),
+        'rdrei.utils'),
     package_data={
         'rdrei': {
             'templates/**.html',
-            'static/*'
-        }
-    },
+            'static/*'}},
     author="Pascal Hartig",
     author_email="phartig@weluse.de",
     description="rdrei micro portal",
     long_description=__doc__,
     license="GPL",
     keywords="portal homepage",
-    url="http://rdrei.net/"
-)
+    url="http://rdrei.net/")

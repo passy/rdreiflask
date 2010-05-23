@@ -48,4 +48,4 @@ def action_flickr_import():
 
 if __name__ == '__main__':
     script.run()
-# vim: set ts=8 sw=4 tw=78 ft=python: 
+# vim: set ts=8 sw=4 tw=78 ft=python:

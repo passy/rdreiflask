@@ -13,6 +13,7 @@ from flask import g
 from rdrei import settings
 from werkzeug.utils import cached_property
 
+
 class FlickrURL(object):
     """Converts a photo to a URL."""
 
@@ -22,8 +23,7 @@ class FlickrURL(object):
         'small': '_m',
         'medium': '',
         'large': '_b',
-        'original': '_o'
-    }
+        'original': '_o'}
 
     def __init__(self, photo):
         self.photo = photo
@@ -35,13 +35,13 @@ class FlickrURL(object):
         url = photo.url.thumb
         """
         if method in self._SIZE_MAPPING:
-            return "http://farm{farm_id}.static.flickr.com/{server}/{id}_{secret}{size}.jpg".format(
+            return "http://farm{farm_id}.static.flickr.com/" \
+                   "{server}/{id}_{secret}{size}.jpg".format(
                 farm_id=self.photo.farm,
                 server=self.photo.server,
                 id=self.photo.id,
                 secret=self.photo.secret,
-                size=self._SIZE_MAPPING[method]
-            )
+                size=self._SIZE_MAPPING[method])
         else:
             return object.__getattr__(method)
 
@@ -51,8 +51,7 @@ class FlickrURL(object):
 
         return "http://flickr.com/photos/{username}/{photo_id}/".format(
             username=settings.FLICKR_USER_NAME,
-            photo_id=self.photo.id
-        )
+            photo_id=self.photo.id)
 
 
 class BaseModel(object):
@@ -102,8 +101,7 @@ class Photo(BaseModel):
     def __repr__(self):
         return '<Photo(id={0}, title="{1}")>'.format(
             self.id,
-            self.title
-        )
+            self.title)
 
 
 class Photos(object):
@@ -162,7 +160,6 @@ class PhotoAlbum(BaseModel):
         except StopIteration:
             return None
 
-
     def previous_photos(self, photo_id, count=1):
         """
         See :meth:``next``.
@@ -186,10 +183,9 @@ class PhotoAlbum(BaseModel):
     def save(self):
         return self._save_hash()
 
+
 class PhotoAlbums(object):
-    """
-    Access to photo albums.
-    """
+    """Access to photo albums."""
 
     @staticmethod
     def by_id(id, attribute=None):

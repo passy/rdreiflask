@@ -38,8 +38,7 @@ class FlickrClient(object):
                         path=self.PATH,
                         method=_method,
                         params=urlencode(params),
-                        api_key=self.api_key
-                    ))
+                        api_key=self.api_key))
             # This might raise exceptions based on network state.
             response = urlopen(url).read()
             return self._parse_response(response)

@@ -23,8 +23,7 @@ from werkzeug.exceptions import NotFound
 def admin_login():
     next = request.args.get('next') or request.referrer or None
     return twitter.authorize(
-        callback=url_for('oauth_authorized', next=next)
-    )
+        callback=url_for('oauth_authorized', next=next))
 
 
 @app.route('/admin/photos', methods=['GET', 'POST'])
@@ -53,8 +52,7 @@ def admin_photo(album_id=None):
 
     return render_template('admin/photos.html',
         form=form,
-        album_id=album_id
-    )
+        album_id=album_id)
 
 
 @app.route('/oauth-authorized')
@@ -67,8 +65,7 @@ def oauth_authorized(response):
 
     session['twitter_token'] = (
         response['oauth_token'],
-        response['oauth_token_secret']
-    )
+        response['oauth_token_secret'])
     session['twitter_user'] = response['screen_name']
 
     flash('You were signed in as %s' % response['screen_name'])

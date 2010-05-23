@@ -37,7 +37,6 @@ class TestPhotos(object):
 
         self.app = app.test_client()
 
-
     def test_basic_query(self):
         """Tests a basic photo query."""
 
@@ -56,7 +55,8 @@ class TestPhotos(object):
 
             assert photo.title == "Jan"
             assert photo.id == "2765703256"
-            assert photo.url.small_square == "http://farm4.static.flickr.com/3156/2765703256_1e70b3f475_s.jpg"
+            assert photo.url.small_square == \
+            "http://farm4.static.flickr.com/3156/2765703256_1e70b3f475_s.jpg"
 
 
 class TestPhotoAlbums(object):

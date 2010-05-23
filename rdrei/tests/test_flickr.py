@@ -12,6 +12,7 @@ def test_api():
     result = client.flickr_people_getInfo(user_id=TEST_USER_ID)
     eq_(result['person']['username']['_content'], 'rdrei')
 
+
 def test_recent():
     photo_counter = 0
     for photo in flickr.get_recent_profile_photos(TEST_USER_ID, per_page=10,

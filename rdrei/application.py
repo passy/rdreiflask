@@ -23,6 +23,7 @@ from rdrei.utils import redis_db
 def _open_redis():
     g.db = redis_db.open_connection()
 
+
 @app.before_request
 def _check_login():
     """

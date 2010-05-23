@@ -29,8 +29,8 @@ def photo_album(album_id):
 
     return {
         'photos': Photos.all_by_album(album_id),
-        'album': PhotoAlbums.by_id(album_id)
-    }
+        'album': PhotoAlbums.by_id(album_id)}
+
 
 @app.route("/photos/album/<int:album_id>/<int:photo_id>")
 @templated("photos/details.html")
@@ -59,8 +59,8 @@ def photo_details(album_id, photo_id):
         'title': album.title + u' \u2014 ' + photo.title,
         'album': album,
         'next_photo': next_photo,
-        'prev_photo': prev_photo
-    }
+        'prev_photo': prev_photo}
+
 
 @app.route("/photos/comments/<int:album_id>/<int:photo_id>")
 @templated("photos/comments.html")
@@ -79,5 +79,4 @@ def photo_comments(album_id, photo_id):
 
     return {
         'album_id': album_id,
-        'photo_id': photo_id
-    }
+        'photo_id': photo_id}

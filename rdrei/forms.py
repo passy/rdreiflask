@@ -12,6 +12,7 @@ WTForm definitions.
 from rdrei.models import PhotoAlbum
 from wtforms import Form, TextField, TextAreaField, IntegerField, validators
 
+
 class PhotoAlbumForm(Form):
     """Form to add or edit a photo album."""
 
@@ -33,7 +34,6 @@ class PhotoAlbumForm(Form):
                 'title': self.title.data,
                 'tag': self.tag.data,
                 'description': self.description.data,
-                'frontcover': self.frontcover.id
-            })
+                'frontcover': self.frontcover.id})
 
         instance.save()
