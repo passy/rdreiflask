@@ -5,7 +5,6 @@
  * Known Bugs
  * ==========
  * 
- * - Home does not load if you start from a different entry point.
  * - Bouncing colors when using not cssanimation capable browsers.
  *
  * :copyright: date, Pascal Hartig <phartig@rdrei.net>
@@ -54,6 +53,11 @@ $.widget("rdrei.topMenu", {
             } else {
                 loaded = true;
             }
+        });
+        // Workaround for home. I consider this a $.address bug.
+        this.element.find("a[rel='address:/']").click(function () {
+            window.location.hash = "#!/";
+            return false;
         });
         this._log("Initialized address topMenu content loader.");
     },
