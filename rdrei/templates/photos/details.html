@@ -49,6 +49,16 @@ $(function () {
         $(this).hide();
         return false;
     });
+    $.get("{{ url_for('photo_num_comments', photo_id=photo.id) }}", function (data) {
+        var text = "Kommentar schreiben",
+            num = parseInt(data);        
+        if (num > 1) {
+            text = data + " Kommentare anzeigen";
+        } else if (num == 1) {
+            text = data + " Kommentar anzeigen";
+        }
+        $("#show-comments").text(text);
+    });
 });
 </script>
 {% endblock %}

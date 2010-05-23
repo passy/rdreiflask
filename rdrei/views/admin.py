@@ -46,6 +46,10 @@ def admin_photo(album_id=None):
         form = PhotoAlbumForm(request.form, obj=album)
         if form.validate():
             form.save(album)
+            if album is None:
+                flash("New album created.")
+            else:
+                flash("Album saved.")
             return redirect(url_for("photo_index"))
     else:
         form = PhotoAlbumForm(obj=album)

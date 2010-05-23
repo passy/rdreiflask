@@ -13,6 +13,7 @@ from rdrei import settings
 from rdrei.application import app
 from rdrei.models import Photos, PhotoAlbums
 from rdrei.utils.template import render_template, templated
+from rdrei.utils.disqus_utils import get_num_posts_by_identifier
 from werkzeug.exceptions import NotFound, BadRequest
 
 
@@ -80,3 +81,11 @@ def photo_comments(album_id, photo_id):
     return {
         'album_id': album_id,
         'photo_id': photo_id}
+
+
+@app.route("/photos/num_comments/<int:photo_id>")
+def photo_num_comments(photo_id):
+    """Returns the number of comments for the given ``photo_id``."""
+
+    result = get_num_posts_by_identifier("photo:" + str(photo_id))
+    return str(result)
