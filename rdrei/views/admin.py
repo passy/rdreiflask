@@ -9,7 +9,7 @@ Admin views.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-from flask import url_for, request, redirect, flash, Module
+from flask import url_for, request, redirect, flash, Module, g
 from rdrei.application import app
 from rdrei.models import PhotoAlbums
 from rdrei.utils.oauth import twitter
@@ -29,10 +29,10 @@ def login():
         callback=url_for('.oauth_authorized', next=next))
 
 
-@admin.route('/photos', methods=['GET', 'POST'])
-@admin.route('/photos/<int:album_id>/', methods=['GET', 'POST'])
+@admin.route('/album', methods=['GET', 'POST'])
+@admin.route('/album/<int:album_id>', methods=['GET', 'POST'])
 @requires_admin
-def photo(album_id=None):
+def edit_album(album_id=None):
     """
     Displays a form to either add or edit a photo album. If the album is
     created from scratch or updates an existing depends on the presence of the
@@ -49,6 +49,7 @@ def photo(album_id=None):
         form = PhotoAlbumForm(request.form, obj=album)
         if form.validate():
             form.save(album)
+
             if album is None:
                 flash("New album created.")
             else:
@@ -60,3 +61,19 @@ def photo(album_id=None):
     return render_template('admin/photos.html',
         form=form,
         album_id=album_id)
+
+
+@admin.route('/album_delete/<int:album_id>')
+@requires_admin
+def delete_album(album_id=None):
+    """
+    Deletes a complete album. But only the association, not the photos
+    themselves.
+    """
+
+    # We could use a method of PhotoAlbum, but as this is an admin function,
+    # it's quite unimportant if the album actually exists. This is the
+    # cheapest call we can make.
+    g.db.delete("photoalbum:" + str(album_id))
+    flash("Album deleted.")
+    return redirect(url_for("photos.index"))

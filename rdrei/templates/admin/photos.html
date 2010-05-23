@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="wrapper" data-color="ltblue" data-title="{{ title }}">
-    <form method="post" action="{{ url_for("photo", album_id=album_id) }}">
+    <form method="post" action="{{ url_for("edit_album", album_id=album_id) }}">
         <dl>
             {{ render_field(form.title) }}
             {{ render_field(form.tag) }}

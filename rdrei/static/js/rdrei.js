@@ -88,6 +88,16 @@ $.widget("rdrei.topMenu", {
         var $endpoint = $(this.options.target),
             that = this;
 
+        // Check if the content is not a redirect or other unexpected kind
+        // of data.
+        // I know this way sucks, but I can't come up with something better right
+        // now. Consider this as the "magic byte".
+        if (data.search(/^\s*<div class="wrapper"/) != 0) {
+            //console.log("Data: ", data);
+            window.location.href = $.address.value();
+            return;
+        }
+
         function replace() {
             $endpoint.html(data);
 

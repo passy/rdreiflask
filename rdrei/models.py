@@ -79,10 +79,7 @@ class BaseModel(object):
         for key, value in self.__dict__.iteritems():
             if key == 'id':
                 continue
-            if not g.db.hset(self.get_key(), key, value):
-                return False
-
-        return True
+            g.db.hset(self.get_key(), key, value)
 
     def __len__(self):
         return len(self.__dict__)
@@ -213,6 +210,9 @@ class PhotoAlbums(object):
 
         for i in xrange(offset, offset + limit):
             key = "photoalbum:" + str(i)
+            if not g.db.exists(key):
+                continue
+
             if attribute:
                 result = g.db.hget(key, attribute)
             else:

@@ -36,4 +36,4 @@ class PhotoAlbumForm(Form):
                 'description': self.description.data,
                 'frontcover': self.frontcover.id})
 
-        instance.save()
+        return instance.save()
