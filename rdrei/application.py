@@ -18,8 +18,10 @@ app.secret_key = settings.SECRET_KEY
 
 from rdrei.utils import redis_db
 from rdrei.views.photos import photos
+from rdrei.views.admin import admin
 
 app.register_module(photos)
+app.register_module(admin)
 
 @app.before_request
 def _open_redis():
@@ -43,4 +45,3 @@ def _check_login():
 def _close_redis(response):
     g.db.connection.disconnect()
     return response
-

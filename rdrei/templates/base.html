@@ -44,7 +44,7 @@
             <ul>
                 {% if not g.is_admin %}
                 <li>
-                    <a href="{{ url_for(".admin_login") }}">Admin</a>
+                    <a href="{{ url_for("admin.login") }}">Admin</a>
                 </li>
                 {% endif %}
                 <li>

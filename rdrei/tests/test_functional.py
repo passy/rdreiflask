@@ -36,3 +36,13 @@ class TestPhotosModule():
     def test_details(self):
         response = self.app.get('/photos/album/1/2765702228')
         eq_(response.status_code, 200)
+
+class TestBaseModule():
+    """Tests the views not associated to a module."""
+
+    def __init__(self):
+        self.app = app.test_client()
+
+    def test_frontpage(self):
+        response = self.app.get('/')
+        eq_(response.status_code, 200)
