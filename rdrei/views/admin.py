@@ -26,7 +26,7 @@ admin = Module(__name__, url_prefix="/admin")
 def login():
     next = request.args.get('next') or request.referrer or None
     return twitter.authorize(
-        callback=url_for('oauth_authorized', next=next))
+        callback=url_for('.oauth_authorized', next=next))
 
 
 @admin.route('/photos', methods=['GET', 'POST'])
@@ -53,7 +53,7 @@ def photo(album_id=None):
                 flash("New album created.")
             else:
                 flash("Album saved.")
-            return redirect(url_for("photo_index"))
+            return redirect(url_for("photos.index"))
     else:
         form = PhotoAlbumForm(obj=album)
 
