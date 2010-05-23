@@ -19,7 +19,8 @@ REDIS_DB = 0
 FLICKR_USER_ID = None
 FLICKR_USER_NAME = None
 FLICKR_API_KEY = None
-DISQUS_API_KEY = None
+# You can register on their site for one.
+DISQUS_USER_API_KEY = None
 
 PHOTOS_PRELOAD_NEXT_COUNT = 5
 TWITTER_API_KEY = None
