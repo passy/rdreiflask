@@ -14,7 +14,9 @@ from rdrei.application import app
 from rdrei.models import Photos, PhotoAlbums
 from rdrei.utils.template import render_template, templated
 from rdrei.utils.disqus_utils import get_num_posts_by_identifier
+from flask import g
 from werkzeug.exceptions import NotFound, BadRequest
+from disqus import APIError
 
 
 @app.route("/photos")
@@ -85,7 +87,32 @@ def photo_comments(album_id, photo_id):
 
 @app.route("/photos/num_comments/<int:photo_id>")
 def photo_num_comments(photo_id):
-    """Returns the number of comments for the given ``photo_id``."""
+    """
+    Returns the number of comments for the given ``photo_id``.
+    The results are cached with redis and have an expiration of five minutes.
+    """
 
-    result = get_num_posts_by_identifier("photo:" + str(photo_id))
-    return str(result)
+    photo_id = str(photo_id)
+    def _request():
+        """
+        Do a request and catch HTTP 500 errors that disqus randomly spits
+        out.
+        """
+        try:
+            result = get_num_posts_by_identifier("photo:" + photo_id)
+        except APIError:
+            result = 0
+
+        return str(result)
+
+    db = g.db
+    cache_key = "photo_num_comments:" + photo_id
+
+    result = db.get(cache_key)
+    if result is None:
+        result = _request()
+        db.set(cache_key, result)
+        # Maybe I could move that to the settings.
+        db.expire(cache_key, 5 * 60)
+
+    return result
