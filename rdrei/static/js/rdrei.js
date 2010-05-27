@@ -54,12 +54,30 @@ $.widget("rdrei.topMenu", {
                 loaded = true;
             }
         });
+
+        this._enableHomeWorkaround();
+        this._log("Initialized address topMenu content loader.");
+    },
+
+    _enableHomeWorkaround: function () {
         // Workaround for home. I consider this a $.address bug.
-        this.element.find("a[rel='address:/']").click(function () {
-            window.location.hash = "#!/";
+        var $homeLink = this.element.find("a[rel='address:/']"),
+            enabled = true,
+            that = this;
+
+        $homeLink.click(function (event) {
+            if (enabled) {
+                that._log("Using weird hash workaround.");
+                window.location.hash = "#!/";
+            }
             return false;
         });
-        this._log("Initialized address topMenu content loader.");
+
+        // Only for the first load.
+        this.element.bind('topmenuloaded', function () {
+            enabled = false;
+            that._log("Disabled weird hash workaround.");
+        });
     },
 
     _init_colorchanger: function () {
@@ -145,7 +163,7 @@ $.widget("rdrei.topMenu", {
             replace();
         } else {
             // Not slided out yet, load later.
-            $endpoint.one('slided-out', function () {
+            $endpoint.unbind('slided-out').one('slided-out', function () {
                 that._log("Delayed replacing of content.");
                 replace();
             });
