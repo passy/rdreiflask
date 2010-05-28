@@ -9,7 +9,7 @@ Deployment script.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-from fabric.api import run, local, env, put, cd
+from fabric.api import run, local, env, put, cd, sudo
 from os import getcwd, chdir, unlink
 
 
@@ -36,6 +36,8 @@ def remote_update():
     with cd(env.dir):
         run("git fetch origin")
         run("git merge -Xtheirs origin/deploy")
+
+    sudo("supervisorctl restart rdreiflask")
 
 
 def compress():
