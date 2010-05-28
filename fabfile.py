@@ -42,6 +42,7 @@ def upload():
 def unpack():
     with cd(env.dir):
         run("tar -xjf deploy.tar.bz2")
+        run("rm deploy.tar.bz2")
 
 
 def remote_clean():
