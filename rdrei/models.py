@@ -206,7 +206,11 @@ class PhotoAlbums(object):
         Remember the starting value is 1 not 0!
         """
         if limit is None:
-            limit = int(g.db.get("photoalbum")) - (offset - 1)
+            album_count = g.db.get("photoalbum")
+            if album_count is None:
+                raise PhotoAlbumNotFound("There was no "
+                    "PhotoAlbum created, yet.")
+            limit = int(album_count) - (offset - 1)
 
         for i in xrange(offset, offset + limit):
             key = "photoalbum:" + str(i)
@@ -223,3 +227,7 @@ class PhotoAlbums(object):
             # Make sure, we're not yielding a deleted entry.
             if result:
                 yield PhotoAlbum(result)
+
+
+class PhotoAlbumNotFoundError(Exception):
+    pass

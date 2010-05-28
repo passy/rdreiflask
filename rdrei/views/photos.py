@@ -10,7 +10,7 @@ Photo related views.
 """
 
 from rdrei import settings
-from rdrei.models import Photos, PhotoAlbums
+from rdrei.models import Photos, PhotoAlbums, PhotoAlbumNotFoundError
 from rdrei.utils.template import render_template, templated
 from rdrei.utils.disqus_utils import get_num_posts_by_identifier
 from flask import g, Module
@@ -24,7 +24,11 @@ photos = Module(__name__, url_prefix="/photos")
 @photos.route("/")
 @templated("photos/index.html")
 def index():
-    albums = PhotoAlbums.all()
+    try:
+        albums = PhotoAlbums.all()
+    except PhotoAlbumNotFoundError:
+        albums = []
+
     return {'albums': albums}
 
 
