@@ -34,7 +34,8 @@ def upload():
 
 def remote_update():
     with cd(env.dir):
-        run("git pull origin deploy")
+        run("git fetch origin")
+        run("git merge -Xtheirs origin/deploy")
 
 
 def compress():

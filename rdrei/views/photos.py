@@ -24,9 +24,9 @@ photos = Module(__name__, url_prefix="/photos")
 @photos.route("/")
 @templated("photos/index.html")
 def index():
-    try:
+    if PhotoAlbums.exists():
         albums = PhotoAlbums.all()
-    except PhotoAlbumNotFoundError:
+    else:
         albums = []
 
     return {'albums': albums}

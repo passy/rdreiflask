@@ -199,6 +199,14 @@ class PhotoAlbums(object):
                 return PhotoAlbum(album)
 
     @staticmethod
+    def exists():
+        """
+        Checks whether the PhotoAlbum data structures exist.
+        """
+
+        return g.db.exists("photoalbum")
+
+    @staticmethod
     def all(offset=1, limit=None, attribute=None):
         """
         Get all albums with by an optional offset of ``offset`` and a
@@ -207,9 +215,6 @@ class PhotoAlbums(object):
         """
         if limit is None:
             album_count = g.db.get("photoalbum")
-            if album_count is None:
-                raise PhotoAlbumNotFoundError("There was no "
-                    "PhotoAlbum created, yet.")
             limit = int(album_count) - (offset - 1)
 
         for i in xrange(offset, offset + limit):
