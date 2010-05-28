@@ -208,7 +208,7 @@ class PhotoAlbums(object):
         if limit is None:
             album_count = g.db.get("photoalbum")
             if album_count is None:
-                raise PhotoAlbumNotFound("There was no "
+                raise PhotoAlbumNotFoundError("There was no "
                     "PhotoAlbum created, yet.")
             limit = int(album_count) - (offset - 1)
 
