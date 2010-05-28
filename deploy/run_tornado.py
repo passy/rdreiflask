@@ -3,7 +3,15 @@
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
-from rdrei import app
+import sys
+import os
+
+
+sys.path.append(os.path.abspath(
+        os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
+
+from rdrei.application import app
 
 
 http_server = HTTPServer(WSGIContainer(app))

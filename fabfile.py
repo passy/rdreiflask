@@ -15,7 +15,8 @@ from os import getcwd, chdir, unlink
 
 def staging():
     env.host_string = "www@test.rdrei.net"
-    env.dir = "/home/www"
+    env.dir = "/home/www/rdreiflask"
+    env.git_remote = "staging"
 
 
 def compress_css():
@@ -27,33 +28,18 @@ def compress_css():
     chdir(old_cwd)
 
 
+def upload():
+    local("git push --force {0} deploy".format(env.git_remote))
+
+
+def remote_update():
+    with cd(env.dir):
+        run("git pull origin deploy")
+
+
 def compress():
     compress_css()
     # TODO: Compress JS
-
-
-def upload():
-    # Create archive
-    local("git archive HEAD --prefix=rdreiflask.deploy/ --format=tar | bzip2 > deploy.tar.bz2")
-    put("deploy.tar.bz2", env.dir)
-    unlink("deploy.tar.bz2")
-
-
-def unpack():
-    with cd(env.dir):
-        run("tar -xjf deploy.tar.bz2")
-        run("rm deploy.tar.bz2")
-
-
-def remote_clean():
-    with cd(env.dir):
-        run("rm -rf rdreiflask.deploy")
-
-
-def replace():
-    with cd(env.dir):
-        run(r"mv rdreiflask rdreiflask.bak$$")
-        run("mv rdreiflask.deploy rdreiflask")
 
 
 def deploy():
@@ -61,12 +47,7 @@ def deploy():
     try:
         compress()
         upload()
+        remote_update()
     finally:
         local("git checkout master")
         local("git branch -D deploy")
-
-    unpack()
-    # TODO: Migrate or something like that?
-    # TODO: Run tests?
-    replace()
-    remote_clean()
