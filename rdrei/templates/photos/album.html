@@ -6,24 +6,22 @@
 {% block title %}{{ album.title }}{% endblock %}
 
 {% block content %}
-<div class="wrapper" data-color="ltblue" data-title="{{ album.title }}">
-    {% if g.is_admin %}
-    <section class="admin-corner">
-        <a {{ link_attr('admin.edit_album', album_id=album.id) }}>Edit Album</a>
-        |
-        <a {{ link_attr('admin.delete_album', album_id=album.id) }}>Delete Album</a>
-    </section>
-    {% endif %}
-    <h2>Album: {{ album.title }}</h2>
+{% if g.is_admin %}
+<section class="admin-corner">
+    <a {{ link_attr('admin.edit_album', album_id=album.id) }}>Edit Album</a>
+    |
+    <a {{ link_attr('admin.delete_album', album_id=album.id) }}>Delete Album</a>
+</section>
+{% endif %}
+<h2>Album: {{ album.title }}</h2>
 
-    <ul class="photo-gallery polaroid">
-    {% for photo in photos %}
-        <li>
-        <a {{ link_attr('details', photo_id=photo.id, album_id=album.id) }} title="{{ photo.title }}">
-            <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
-        </a>
-        </li>
-    {% endfor %}
-    </ul>
-</div>
+<ul class="photo-gallery polaroid">
+{% for photo in photos %}
+    <li>
+    <a {{ link_attr('details', photo_id=photo.id, album_id=album.id) }} title="{{ photo.title }}">
+        <img src="{{ photo.url.small }}" alt="{{ photo.title }}" />
+    </a>
+    </li>
+{% endfor %}
+</ul>
 {% endblock %}

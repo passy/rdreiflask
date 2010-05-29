@@ -6,17 +6,15 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="wrapper" data-color="ltblue" data-title="{{ title }}">
-    <form method="post" action="{{ url_for("edit_album", album_id=album_id) }}">
-        <dl>
-            {{ render_field(form.title) }}
-            {{ render_field(form.tag) }}
-            {{ render_field(form.description) }}
-            {{ render_field(form.frontcover) }}
-        </dl>
-        <p>
-            <button type="submit">Submit</button>
-        </p>
-    </form>
-</div>
+<form method="post" action="{{ url_for("edit_album", album_id=album_id) }}">
+    <dl>
+        {{ render_field(form.title) }}
+        {{ render_field(form.tag) }}
+        {{ render_field(form.description) }}
+        {{ render_field(form.frontcover) }}
+    </dl>
+    <p>
+        <button type="submit">Submit</button>
+    </p>
+</form>
 {% endblock %}

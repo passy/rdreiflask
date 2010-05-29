@@ -6,23 +6,21 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="wrapper" data-color="ltblue" data-title="{{ title }}">
-    {% if g.is_admin %}
-    <section class="admin-corner">
-        <a {{ link_attr('admin.edit_album') }}>Neues Album</a>
-    </section>
-    {% endif %}
-    <h2>Photos</h2>
+{% if g.is_admin %}
+<section class="admin-corner">
+    <a {{ link_attr('admin.edit_album') }}>Neues Album</a>
+</section>
+{% endif %}
+<h2>Photos</h2>
 
-    <ul class="photo-gallery watercolor">
-        {% for album in albums %}
-        <li>
-            <a {{ link_attr('album', album_id=album.id) }}>
-                <em>{{ album.title }}</em>
-                <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Cover picture" />
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+<ul class="photo-gallery watercolor">
+    {% for album in albums %}
+    <li>
+        <a {{ link_attr('album', album_id=album.id) }}>
+            <em>{{ album.title }}</em>
+            <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Cover picture" />
+        </a>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

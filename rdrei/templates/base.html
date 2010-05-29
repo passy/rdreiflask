@@ -39,7 +39,9 @@
         </header>
         <section id="content">
             <div id="ajax-endpoint">
-                {% block content %}Loading ...{% endblock %}
+                <div class="wrapper" data-title="{{ title }}" data-color="{{ body_class }}">
+                    {% block content %}Loading ...{% endblock %}
+                </div>
             </div>
         </section>
         <footer>

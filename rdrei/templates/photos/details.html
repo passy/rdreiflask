@@ -5,40 +5,39 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="wrapper" id="photo-details" data-color="ltblue" data-title="{{ title }}">
+<section id="photo-details">
+<h2>{{ title }}</h2>
 
-    <h2>{{ title }}</h2>
-
-    <nav>
-        <a {{ link_attr("album", album_id=album.id) }} class="album">Zurück zum Album</a>
+<nav>
+    <a {{ link_attr("album", album_id=album.id) }} class="album">Zurück zum Album</a>
+    {% if next_photo %}
+    <a {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }} class="next">Weiter</a>
+    {% else %}
+    <span class="next disabled">Weiter</span>
+    {% endif %}
+    {% if prev_photo %}
+    <a {{ link_attr("details", album_id=album.id, photo_id=prev_photo.id, _slide="right") }} class="prev">Zurück</a>
+    {% else %}
+    <span class="prev disabled">Zurück</span>
+    {% endif %}
+</nav>
+<div class="photo-container">
+    <div>
+        <!-- The preview is usually in cache, so this helps. -->
+        <img class="preview" src="{{ photo.url.small }}" alt="" />
         {% if next_photo %}
-        <a {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }} class="next">Weiter</a>
-        {% else %}
-        <span class="next disabled">Weiter</span>
-        {% endif %}
-        {% if prev_photo %}
-        <a {{ link_attr("details", album_id=album.id, photo_id=prev_photo.id, _slide="right") }} class="prev">Zurück</a>
-        {% else %}
-        <span class="prev disabled">Zurück</span>
-        {% endif %}
-    </nav>
-    <div class="photo-container">
-        <div>
-            <!-- The preview is usually in cache, so this helps. -->
-            <img class="preview" src="{{ photo.url.small }}" alt="" />
-            {% if next_photo %}
-            <a class="next" {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }}>
-                <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
-            </a>
-            {% else %}
+        <a class="next" {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }}>
             <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
-            {% endif %}
-        </div>
+        </a>
+        {% else %}
+        <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+        {% endif %}
     </div>
-    <details>{{ photo.title }}</details>
-    <a href="#" id="show-comments">Kommentare anzeigen</a>
-    <div id="disqus-thread"></div>
 </div>
+<details>{{ photo.title }}</details>
+<a href="#" id="show-comments">Kommentare anzeigen</a>
+<div id="disqus-thread"></div>
+</section>
 {% endblock %}
 {% block script %}
 {{ super() }}
