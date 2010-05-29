@@ -25,6 +25,11 @@ def blog_index():
     return render_template("blog.html")
 
 
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+
 @app.route('/oauth-authorized')
 @twitter.authorized_handler
 def oauth_authorized(response):

@@ -1,3 +1,4 @@
+{% from "macros.html" import link_attr %}
 <!DOCTYPE html>
 
 {%- macro get_body_class() -%}
@@ -50,7 +51,7 @@
                 </li>
                 {% endif %}
                 <li>
-                    <a href="#">Impressum</a>
+                    <a {{ link_attr(".about") }}>Impressum</a>
                 </li>
             </ul>
         </nav>

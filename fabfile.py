@@ -25,6 +25,14 @@ def compress_css():
     local("compass compile -c config.rb.prod")
     local("git add -f css/")
     local("git commit -m 'CSS Update'")
+
+    chdir(old_cwd)
+
+
+def compile_css():
+    old_cwd = getcwd()
+    chdir("rdrei/static/")
+    local("compass compile")
     chdir(old_cwd)
 
 
@@ -54,3 +62,5 @@ def deploy():
     finally:
         local("git checkout master")
         local("git branch -D deploy")
+
+    compile_css()
