@@ -18,7 +18,11 @@
     <li>
         <a {{ link_attr('album', album_id=album.id) }}>
             <em>{{ album.title }}</em>
-            <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Cover picture" />
+            {% if album.frontcover_photo %}
+                <img src="{{ album.frontcover_photo.url.small }}" alt="Cover picture" />
+            {% else %}
+                <img src="http://www.webdesignerwall.com/demo/decorative-gallery/images/9.jpg" alt="Cover picture" />
+            {% endif %}
         </a>
     </li>
     {% endfor %}

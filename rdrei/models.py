@@ -137,6 +137,15 @@ class PhotoAlbum(BaseModel):
     def photos(self):
         return g.db.smembers("phototags:" + self.tag)
 
+    @cached_property
+    def frontcover_photo(self):
+        """
+        Property that returns either an instance of :class:``Photo`` or
+        ``None`` as this is an optional attribute.
+        """
+        if 'frontcover' in self.__dict__:
+            return Photos.by_id(self.frontcover)
+
     def next_photos(self, photo_id, count=1):
         """
         Returns the next ``count`` photo elements after the photo identified
