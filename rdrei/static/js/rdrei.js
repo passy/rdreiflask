@@ -115,7 +115,7 @@ $.widget("rdrei.topMenu", {
         // I know this way sucks, but I can't come up with something better right
         // now. Consider this as the "magic byte".
         if (data.search(/^\s*<div class="wrapper"/) != 0) {
-            //console.log("Data: ", data);
+            this._log("Doesn't look like a dynamic response. Reloading.");
             window.location.href = $.address.value();
             return;
         }
@@ -215,6 +215,12 @@ $.fn.colorChanger = function (color, options) {
         duration: 5000
     }),
         previousColor = this.data('color');
+
+    if (previousColor === color) {
+        // No need to reapply this. Only messes up browsers without css
+        // animations.
+        return;
+    }
 
     if (Modernizr.cssanimations) {
         // Remove previously applied color.
