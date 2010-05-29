@@ -154,6 +154,7 @@ $.widget("rdrei.topMenu", {
             // $.address.title is useless.
             window.document.title = newTitle;
 
+            that._log("Content loaded.");
             that._trigger('loaded');
         }
 
@@ -189,8 +190,8 @@ $.widget("rdrei.topMenu", {
 
         if (this.options.slideEffect) {
             this._slidedOut = false;
-            $endpoint.hide('slide', {direction: direction}, function () {
-                this._slidedOut = true;
+            $endpoint.stop(true, true).hide('slide', {direction: direction}, function () {
+                that._slidedOut = true;
                 $(this).trigger('slided-out');
             });
         }
