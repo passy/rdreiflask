@@ -37,6 +37,14 @@ class TestPhotosModule():
         response = self.app.get('/photos/album/1/2765702228')
         eq_(response.status_code, 200)
 
+    def test_album_404(self):
+        response = self.app.get('/photos/album/999999999999999')
+        eq_(response.status_code, 404)
+
+    def test_album_photo_404(self):
+        response = self.app.get('/photos/album/1/124')
+        eq_(response.status_code, 404)
+
 class TestBaseModule():
     """Tests the views not associated to a module."""
 

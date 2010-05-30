@@ -36,9 +36,13 @@ def index():
 @templated("photos/album.html")
 def album(album_id):
 
+    album = PhotoAlbums.by_id(album_id)
+    if album is None:
+        raise NotFound("Album does not exist.")
+
     return {
         'photos': Photos.all_by_album(album_id),
-        'album': PhotoAlbums.by_id(album_id)}
+        'album': album}
 
 
 @photos.route("/album/<int:album_id>/<int:photo_id>")

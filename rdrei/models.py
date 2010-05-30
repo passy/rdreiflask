@@ -235,7 +235,7 @@ class PhotoAlbums(object):
             return g.db.hget(key, attribute)
         else:
             album = g.db.hgetall(key)
-            if album is not None:
+            if album:
                 album['id'] = id
                 return PhotoAlbum(album)
 
