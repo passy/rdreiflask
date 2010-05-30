@@ -119,6 +119,8 @@ class Photo(BaseModel):
 
         if 'horizontal' in self.__dict__:
             return int(self.__dict__['horizontal']) == 1
+        if 'width_m' in self.__dict__:
+            return int(self.height_m) > int(self.width_m)
         if 'width_o' in self.__dict__:
             return int(self.height_o) > int(self.width_o)
 

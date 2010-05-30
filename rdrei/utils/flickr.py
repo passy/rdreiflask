@@ -82,13 +82,20 @@ def get_recent_profile_photos(user_id=FLICKR_USER_ID, max_photos=500,
             user_id=user_id,
             page=page_index,
             per_page=per_page,
-            extras='tags,url_o,o_dims')
+            extras='tags,url_o,url_m,o_dims')
 
         assert 'photos' in photos, "Invalid flickr response"
 
         for photo in photos['photos']['photo']:
-            photo['original_secret'] = _extract_original_secret(photo['url_o'])
-            del photo['url_o']
+            # flickr is weird with this stuff. For no obvious reasons it
+            # sometimes includes the original format URLs, sometimes not. The
+            # problem with this is, that without the url, there are no
+            # dimension information available.
+            if 'url_o' in photo:
+                photo['original_secret'] = _extract_original_secret(photo['url_o'])
+                del photo['url_o']
+
+            del photo['url_m']
             yield photo
 
         page_index += 1

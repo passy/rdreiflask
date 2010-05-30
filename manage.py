@@ -36,8 +36,12 @@ def action_flickr_import():
             break
 
         for subkey in ('title', 'farm', 'server', 'secret', 'id',
-                       'original_secret', 'height_o', 'width_o'):
-            db.hset(key, subkey, photo[subkey])
+                       'original_secret', 'height_o', 'width_o',
+                       'height_m', 'width_m'):
+            # We need to double-check, because flickr is very picky about what
+            # and when to include attributes.
+            if subkey in photo:
+                db.hset(key, subkey, photo[subkey])
 
         # Save the tags to subsets
         for tag in photo['tags'].split(' '):
