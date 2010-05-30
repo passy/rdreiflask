@@ -11,7 +11,7 @@ Admin views.
 
 from flask import url_for, request, redirect, flash, Module, g
 from rdrei.application import app
-from rdrei.models import PhotoAlbums
+from rdrei.models import PhotoAlbums, Photos
 from rdrei.utils.oauth import twitter
 from rdrei.utils.auth import requires_admin
 from rdrei.utils.template import templated, render_template
@@ -77,3 +77,16 @@ def delete_album(album_id=None):
     g.db.delete("photoalbum:" + str(album_id))
     flash("Album deleted.")
     return redirect(url_for("photos.index"))
+
+
+@admin.route('/photo/toggle_orientation/<int:photo_id>')
+@requires_admin
+def photo_toggle_orientation(photo_id):
+    """
+    Toggles the vertical/horizontal orientation of a photo.
+    """
+
+    photo = Photos.by_id(photo_id)
+    photo.horizontal = int(photo.horizontal == False)
+    photo.save()
+    return photo.horizontal and 'horizontal' or 'vertical'

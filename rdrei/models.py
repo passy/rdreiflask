@@ -100,10 +100,15 @@ class Photo(BaseModel):
     Object representation of a photo.
     """
 
+    __prefix__ = 'photo'
+
     @property
     def url(self):
         # Create the url object on the fly.
         return FlickrURL(self)
+
+    def save(self):
+        return self._save_hash()
 
     def _get_horizontal(self):
         """
@@ -113,11 +118,11 @@ class Photo(BaseModel):
         """
 
         if 'horizontal' in self.__dict__:
-            return self.__dict__['horizontal']
+            return int(self.__dict__['horizontal']) == 1
         if 'width_o' in self.__dict__:
             return int(self.height_o) > int(self.width_o)
-        else:
-            return False
+
+        return False
 
     def _set_horizontal(self, value):
         """

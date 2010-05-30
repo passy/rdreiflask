@@ -10,6 +10,11 @@
 
 {% block content %}
 <section id="photo-details">
+{% if g.is_admin %}
+<section class="admin-corner">
+    <a id="admin-toggle-orientation" href="{{ url_for('admin.photo_toggle_orientation', photo_id=photo.id) }}">Toggle Orientation</a>
+</section>
+{% endif %}
 <h2>{{ title }}</h2>
 
 <nav>
