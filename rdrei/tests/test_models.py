@@ -58,6 +58,22 @@ class TestPhotos(object):
             assert photo.url.small_square == \
             "http://farm4.static.flickr.com/3156/2765703256_1e70b3f475_s.jpg"
 
+    def test_original_dimensions(self):
+        """Tests the original dimensions."""
+
+        with _request_context('/'):
+            photo = Photos.by_id(2771566478)
+
+            assert photo.title == "Anna, Julia"
+            assert photo.url.original == \
+            "http://farm4.static.flickr.com/3161/2771566478_de1bd165a0_o.jpg"
+            assert photo.horizontal == False
+            assert int(photo.height_o) == 768
+
+            photo2 = Photos.by_id(2771569486)
+            assert photo2.horizontal == True
+            assert int(photo2.height_o) == 1024
+
 
 class TestPhotoAlbums(object):
     """Tests for the photo album model."""
@@ -71,7 +87,7 @@ class TestPhotoAlbums(object):
 
             assert len(next_list) == 5
             assert next_list[0].id == '2764855853'
-            assert next_list[4].id == '2765704162'
+            assert next_list[4].id == '2765704378'
 
     def test_next_truncated(self):
         """Test next if above the upper limit."""
@@ -92,8 +108,8 @@ class TestPhotoAlbums(object):
             prev_list = list(album.previous_photos('2765703256', 4))
 
             assert len(prev_list) == 4
-            assert prev_list[0].id == '2765702488'
-            assert prev_list[3].id == '2765704378'
+            assert prev_list[0].id == '2764854905'
+            assert prev_list[3].id == '2765704162'
 
     def test_prev_truncated(self):
         """Tests the prev method with truncated result set."""

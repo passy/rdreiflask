@@ -10,6 +10,7 @@ Some utils to access the flickr api easily.
 """
 
 import simplejson
+import re
 from rdrei.settings import FLICKR_USER_ID, FLICKR_API_KEY
 from urllib import urlencode
 from urllib2 import urlopen
@@ -59,6 +60,14 @@ class FlickrClient(object):
         return data
 
 
+_ORIGINAL_SECRET_RE = re.compile(r'^http:\/\/farm\d+\.static.flickr.com\/\d+/\d+_([a-z0-9]+)_o\.jpg')
+
+def _extract_original_secret(url_o):
+    """Extracts the secret for the original photo."""
+
+    return _ORIGINAL_SECRET_RE.match(url_o).group(1)
+
+
 def get_recent_profile_photos(user_id=FLICKR_USER_ID, max_photos=500,
                               per_page=50):
     """
@@ -73,14 +82,16 @@ def get_recent_profile_photos(user_id=FLICKR_USER_ID, max_photos=500,
             user_id=user_id,
             page=page_index,
             per_page=per_page,
-            extras='tags')
+            extras='tags,url_o,o_dims')
 
         assert 'photos' in photos, "Invalid flickr response"
 
         for photo in photos['photos']['photo']:
+            photo['original_secret'] = _extract_original_secret(photo['url_o'])
+            del photo['url_o']
             yield photo
 
         page_index += 1
-        if page_index == photos['photos']['pages']:
+        if page_index > photos['photos']['pages']:
             # No more photos to fetch.
             break

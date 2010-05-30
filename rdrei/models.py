@@ -34,16 +34,26 @@ class FlickrURL(object):
         photo = Photo.by_id(123)
         url = photo.url.thumb
         """
+
         if method in self._SIZE_MAPPING:
+            # Not all of the photos have an original secret.
+            if method == 'original':
+                try:
+                    secret = self.photo.original_secret
+                except AttributeError:
+                    return None
+            else:
+                secret = self.photo.secret
+
             return "http://farm{farm_id}.static.flickr.com/" \
                    "{server}/{id}_{secret}{size}.jpg".format(
                 farm_id=self.photo.farm,
                 server=self.photo.server,
                 id=self.photo.id,
-                secret=self.photo.secret,
+                secret=secret,
                 size=self._SIZE_MAPPING[method])
-        else:
-            return object.__getattr__(method)
+
+        return object.__getattr__(method)
 
     @property
     def details(self):
@@ -94,6 +104,28 @@ class Photo(BaseModel):
     def url(self):
         # Create the url object on the fly.
         return FlickrURL(self)
+
+    def _get_horizontal(self):
+        """
+        Return whether the photo is horizontal or not. Uses either the
+        horizontal flag, the original dimensions or returns `False` as
+        default.
+        """
+
+        if 'horizontal' in self.__dict__:
+            return self.__dict__['horizontal']
+        if 'width_o' in self.__dict__:
+            return int(self.height_o) > int(self.width_o)
+        else:
+            return False
+
+    def _set_horizontal(self, value):
+        """
+        Sets the horizontal value.
+        """
+        self.__dict__['horizontal'] = value
+
+    horizontal = property(_get_horizontal, _set_horizontal)
 
     def __repr__(self):
         return '<Photo(id={0}, title="{1}")>'.format(

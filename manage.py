@@ -35,7 +35,8 @@ def action_flickr_import():
             print("Came across already known photo.")
             break
 
-        for subkey in ('title', 'farm', 'server', 'secret', 'id'):
+        for subkey in ('title', 'farm', 'server', 'secret', 'id',
+                       'original_secret', 'height_o', 'width_o'):
             db.hset(key, subkey, photo[subkey])
 
         # Save the tags to subsets

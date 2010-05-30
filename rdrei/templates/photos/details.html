@@ -4,6 +4,10 @@
 {% set body_class = "ltblue" %}
 {% block title %}{{ title }}{% endblock %}
 
+{% macro show_photo(photo, class="photo") %}
+    <img class="{{ class }}" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+{% endmacro %}
+
 {% block content %}
 <section id="photo-details">
 <h2>{{ title }}</h2>
@@ -21,16 +25,16 @@
     <span class="prev disabled">Zurück</span>
     {% endif %}
 </nav>
-<div class="photo-container">
+<div class="photo-container{% if photo.horizontal %} horizontal{% endif %}">
     <div>
         <!-- The preview is usually in cache, so this helps. -->
         <img class="preview" src="{{ photo.url.small }}" alt="" />
         {% if next_photo %}
         <a class="next" {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }}>
-            <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+            {{ show_photo(photo) }}
         </a>
         {% else %}
-        <img class="photo" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+            {{ show_photo(photo) }}
         {% endif %}
     </div>
 </div>
