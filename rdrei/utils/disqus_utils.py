@@ -10,7 +10,7 @@ Utilities for accessing the Disqus API.
 """
 
 from rdrei import settings
-from disqus import DisqusService
+from rdrei.utils.thirdparty.disqus import DisqusService
 
 
 def get_service():
