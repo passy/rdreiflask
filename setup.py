@@ -22,13 +22,15 @@ setup(
         'rdrei.views',
         'rdrei.utils'),
     package_data={
-        'rdrei': {
+        'rdrei': [
             'templates/**.html',
-            'static/*'}},
+            'static/*']},
     author="Pascal Hartig",
     author_email="phartig@weluse.de",
     description="rdrei micro portal",
     long_description=__doc__,
     license="GPL",
     keywords="portal homepage",
-    url="http://rdrei.net/")
+    url="http://rdrei.net/",
+    test_require="nose",
+    test_suite="nose.collector")
