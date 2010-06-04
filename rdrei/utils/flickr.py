@@ -60,7 +60,9 @@ class FlickrClient(object):
         return data
 
 
-_ORIGINAL_SECRET_RE = re.compile(r'^http:\/\/farm\d+\.static.flickr.com\/\d+/\d+_([a-z0-9]+)_o\.jpg')
+_ORIGINAL_SECRET_RE = re.compile(
+    r'^http:\/\/farm\d+\.static.flickr.com\/\d+/\d+_([a-z0-9]+)_o\.jpg')
+
 
 def _extract_original_secret(url_o):
     """Extracts the secret for the original photo."""
@@ -92,7 +94,8 @@ def get_recent_profile_photos(user_id=FLICKR_USER_ID, max_photos=500,
             # problem with this is, that without the url, there are no
             # dimension information available.
             if 'url_o' in photo:
-                photo['original_secret'] = _extract_original_secret(photo['url_o'])
+                photo['original_secret'] = _extract_original_secret(
+                    photo['url_o'])
                 del photo['url_o']
 
             del photo['url_m']

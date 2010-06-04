@@ -13,8 +13,7 @@ from flask import Flask, g, session
 from rdrei import settings
 
 app = Flask(__name__)
-app.debug = settings.DEBUG
-app.secret_key = settings.SECRET_KEY
+app.config.from_object(settings)
 
 from rdrei.utils import redis_db
 from rdrei.views.photos import photos
@@ -22,6 +21,7 @@ from rdrei.views.admin import admin
 
 app.register_module(photos)
 app.register_module(admin)
+
 
 @app.before_request
 def _open_redis():

@@ -45,6 +45,7 @@ class TestPhotosModule():
         response = self.app.get('/photos/album/1/124')
         eq_(response.status_code, 404)
 
+
 class TestBaseModule():
     """Tests the views not associated to a module."""
 

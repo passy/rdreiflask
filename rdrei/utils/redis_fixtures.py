@@ -65,8 +65,7 @@ class RedisListLoader(RedisDataLoader):
 _REDIS_LOADER_MAPPING = {
     'string': RedisStringLoader,
     'hash': RedisHashLoader,
-    'list': RedisListLoader
-}
+    'list': RedisListLoader}
 
 
 def load_fixture(redis_db, filename):

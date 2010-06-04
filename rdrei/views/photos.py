@@ -103,6 +103,7 @@ def num_comments(photo_id):
     """
 
     photo_id = str(photo_id)
+
     def _request():
         """
         Do a request and catch HTTP 500 errors that disqus randomly spits
