@@ -27,7 +27,7 @@ class TestPhotosModule():
 
         response = self.app.get('/photos/')
         eq_(response.status_code, 200)
-        assert "<h2>Photos</h2>" in response.data
+        assert "<h2>Foto-Alben</h2>" in response.data
 
     def test_album(self):
         response = self.app.get('/photos/album/1')

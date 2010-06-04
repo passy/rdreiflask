@@ -13,6 +13,14 @@ from redis import Redis
 from rdrei import settings
 
 
-def open_connection():
+def open_connection(database=None):
+    """
+    Opens a connection to a redis database based on config values but
+    accepts an optional ``database`` parameter to override the config
+    value.
+    """
+    if database is None:
+        database = settings.REDIS_DB
+
     return Redis(settings.REDIS_HOST, settings.REDIS_PORT,
-                       settings.REDIS_DB)
+                 database)

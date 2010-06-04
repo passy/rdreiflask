@@ -83,10 +83,10 @@ class TestPhotoAlbums(object):
 
         with _request_context('/'):
             album = PhotoAlbums.by_id(1)
-            next_list = list(album.next_photos('2765703772', 5))
+            next_list = list(album.next_photos('2765702228', 5))
 
             assert len(next_list) == 5
-            assert next_list[0].id == '2764855853'
+            assert next_list[0].id == '2764854905'
             assert next_list[4].id == '2765704378'
 
     def test_next_truncated(self):
@@ -94,11 +94,11 @@ class TestPhotoAlbums(object):
 
         with _request_context('/'):
             album = PhotoAlbums.by_id(1)
-            next_list = list(album.next_photos('2765703256', 4))
+            next_list = list(album.next_photos('2765703772', 4))
 
             assert len(next_list) == 2
-            assert next_list[0].id == '2765703092'
-            assert next_list[1].id == '2765702000'
+            assert next_list[0].id == '2765702000'
+            assert next_list[1].id == '2765703092'
 
     def test_prev(self):
         """Tests the prev method."""
@@ -108,7 +108,7 @@ class TestPhotoAlbums(object):
             prev_list = list(album.previous_photos('2765703256', 4))
 
             assert len(prev_list) == 4
-            assert prev_list[0].id == '2764854905'
+            assert prev_list[0].id == '2764854737'
             assert prev_list[3].id == '2765704162'
 
     def test_prev_truncated(self):
@@ -116,7 +116,7 @@ class TestPhotoAlbums(object):
 
         with _request_context('/'):
             album = PhotoAlbums.by_id(1)
-            prev_list = list(album.previous_photos('2765703772', 4))
+            prev_list = list(album.previous_photos('2764854905', 4))
 
             assert len(prev_list) == 1
             assert prev_list[0].id == '2765702228'
@@ -126,6 +126,6 @@ class TestPhotoAlbums(object):
 
         with _request_context('/'):
             album = PhotoAlbums.by_id(1)
-            next_list = list(album.next_photos('2765702000'))
+            next_list = list(album.next_photos('2765703092'))
 
             assert len(next_list) == 0
