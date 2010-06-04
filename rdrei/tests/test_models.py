@@ -12,6 +12,8 @@ I have no fixtures for. This is a TODO.
 
 
 from rdrei.models import Photos, PhotoAlbums
+from rdrei.tests.utils import get_fixture_path
+from rdrei.utils.redis_fixtures import load_fixture
 from rdrei.utils import redis_db
 from rdrei.application import app
 from flask import g
@@ -25,7 +27,9 @@ def _request_context(*args, **kwargs):
     with app.test_request_context(*args, **kwargs):
         # Unfortunately, flask does not provide decorated before/after
         # functions in this context, so we have to do this manually.
-        g.db = redis_db.open_connection()
+        g.db = redis_db.open_connection(1)
+        load_fixture(get_fixture_path("0010_photos.json"))
+        load_fixture(get_fixture_path("0011_photo_albums.json"))
         yield
 
 

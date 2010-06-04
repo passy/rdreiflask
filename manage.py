@@ -13,6 +13,14 @@ Management script.
 from werkzeug import script
 
 
+def _prepare_context(app):
+    ctx = app.test_request_context()
+    ctx.push()
+    app.preprocess_request()
+
+    return ctx
+
+
 def action_runserver():
     from rdrei.application import app
 
@@ -50,6 +58,79 @@ def action_flickr_import():
             db.sadd('phototags', tag)
 
         db.sadd('photos', photo['id'])
+
+
+
+
+def action_dump_photos():
+    """
+    Dumps the photos from redis to stdout.
+    """
+    import simplejson
+    from flask import g
+    from rdrei.application import app
+    from rdrei.utils.redis_fixtures import dump_fixture
+    ctx = _prepare_context(app)
+
+
+    # As 'closure' to not load simplejson in global space.
+    class _SetSerializer(simplejson.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, set):
+                return list(obj)
+
+            return simplejson.JSONEncoder.default(self, obj)
+
+
+    result = []
+    result.append(dump_fixture("photos"))
+
+    for photo in g.db.smembers("photos"):
+        result.append(dump_fixture("photo:" + photo))
+
+    result.append(dump_fixture("phototags"))
+
+    for phototag in g.db.smembers("phototags"):
+        result.append(dump_fixture("phototags:" + phototag))
+
+    print(simplejson.dumps(result, cls=_SetSerializer))
+
+    ctx.pop()
+
+
+def action_dump_albums():
+    """Dumps the albums to stdout."""
+
+    import simplejson
+    from flask import g
+    from rdrei.application import app
+    from rdrei.utils.redis_fixtures import dump_fixture
+
+    ctx = _prepare_context(app)
+
+    result = []
+    result.append(dump_fixture("photoalbum"))
+
+    for i in xrange(1, int(g.db.get("photoalbum"))):
+        key = "photoalbum:" + str(i)
+        if g.db.exists(key):
+            result.append(dump_fixture(key))
+
+    print(simplejson.dumps(result))
+
+    ctx.pop()
+
+
+def action_load_dump(filename="data.json"):
+    """Loads a fixture from a file."""
+
+    from rdrei.utils.redis_fixtures import load_fixture
+    ctx = _prepare_context(app)
+
+    load_fixture(filename)
+
+    ctx.pop()
+
 
 if __name__ == '__main__':
     script.run()

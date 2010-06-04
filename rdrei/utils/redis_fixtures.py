@@ -9,6 +9,7 @@ Loading data into redis from JSOM files.
 :license: BSD
 """
 
+from flask import g
 import simplejson
 
 
@@ -82,7 +83,7 @@ _REDIS_LOADER_MAPPING = {
     'set': RedisSetLoader}
 
 
-def load_fixture(redis_db, filename):
+def load_fixture(filename):
     """
     Loads a JSON fixture into redis. Accepts a JSON list like::
         [{
@@ -99,22 +100,48 @@ def load_fixture(redis_db, filename):
             "value": {"key1": "val1", "key2": "val2"}
         }]
 
-    :param redis_db: A pyredis instance.
     :param filename: Path to the fixture json file.
     """
 
     json_data = simplejson.load(open(filename, 'r'))
     # Create a new pipeline for 'transactional' writing.
-    pipeline = redis_db.pipeline()
+    pipeline = g.db.pipeline()
 
     try:
         for entry in json_data:
             cls = _REDIS_LOADER_MAPPING.get(entry['type'], None)
             if cls is not None:
-                cls(redis_db).save(entry['key'], entry['value'])
+                cls(g.db).save(entry['key'], entry['value'])
     except:
         # Pokemon-catch because this affects all kinds of interruption.
         pipeline.reset()
         raise
     else:
         pipeline.execute()
+
+
+#: Maps a redis data type to a retrieval function.
+_REDIS_FUNC_MAPPING = {
+    'set': "smembers",
+    'hash': "hgetall",
+    'string': "get"
+}
+
+
+def dump_fixture(key):
+    """Dumps dict fragment for the given key that is json serializable."""
+
+    type = g.db.type(key)
+
+    try:
+        fn = _REDIS_FUNC_MAPPING[type]
+    except KeyError:
+        raise TypeError("Redis keys of type {0} are not yet supported for "
+                        "dumping.".format(type))
+
+    value = getattr(g.db, fn)(key)
+
+    return {
+        'type': type,
+        'key': key,
+        'value': value}
