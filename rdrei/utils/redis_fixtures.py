@@ -49,6 +49,19 @@ class RedisHashLoader(RedisDataLoader):
             self.redis_db.hset(key, hkey, hvalue)
 
 
+class RedisSetLoader(RedisDataLoader):
+    """
+    Saves a set into the redis db.
+    """
+
+    def save(self, key, value):
+        if isinstance(value, (list, set)):
+            for entry in value:
+                self.redis_db.sadd(key, entry)
+        else:
+            self.redis_db.sadd(key, str(value))
+
+
 class RedisListLoader(RedisDataLoader):
     """
     Loads a list into redis.
@@ -65,7 +78,8 @@ class RedisListLoader(RedisDataLoader):
 _REDIS_LOADER_MAPPING = {
     'string': RedisStringLoader,
     'hash': RedisHashLoader,
-    'list': RedisListLoader}
+    'list': RedisListLoader,
+    'set': RedisSetLoader}
 
 
 def load_fixture(redis_db, filename):

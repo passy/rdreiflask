@@ -51,3 +51,11 @@ class TestRedisFixtures(object):
         eq_(self.redis_db.lindex('mylist', 0), "item1")
         eq_(self.redis_db.lindex('mylist', 1), "item2")
         eq_(self.redis_db.hget('myhash', "key1"), "val1")
+
+    def test_load_old_photos(self):
+        """Tests the import of the old photos."""
+
+        fixture = load_fixture(self.redis_db,
+                               get_fixture_path("0000_old_photos.json"))
+
+        assert '650438865' in self.redis_db.smembers('phototags:kiwo072')
