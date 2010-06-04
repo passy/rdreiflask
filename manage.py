@@ -125,6 +125,7 @@ def action_load_dump(filename="data.json"):
     """Loads a fixture from a file."""
 
     from rdrei.utils.redis_fixtures import load_fixture
+    from rdrei.application import app
     ctx = _prepare_context(app)
 
     load_fixture(filename)
