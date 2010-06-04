@@ -1,0 +1,13 @@
+[{
+    "type": "string",
+    "key": "hello",
+    "value": "world"
+}, {
+    "type": "list",
+    "key": "mylist",
+    "value": ["item1", "item2", "item3"]
+}, {
+    "type": "hash",
+    "key": "myhash",
+    "value": {"key1": "val1", "key2": "val2"}
+}]

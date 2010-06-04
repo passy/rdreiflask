@@ -35,8 +35,19 @@ class TestRedisFixtures(object):
         self.redis_db.flushdb()
 
     def test_load_single_key(self):
+        self.redis_db.flushdb()
+
         # This should not be available, yet.
         assert self.redis_db.get('hello') is None
         fixture = load_fixture(self.redis_db,
                                get_fixture_path("0001_simple_key.json"))
         eq_(self.redis_db.get('hello'), "world")
+
+    def test_load_multiple_keys(self):
+        fixture = load_fixture(self.redis_db,
+                               get_fixture_path("0002_multiple_keys.json"))
+
+        eq_(self.redis_db.get('hello'), "world")
+        eq_(self.redis_db.lindex('mylist', 0), "item1")
+        eq_(self.redis_db.lindex('mylist', 1), "item2")
+        eq_(self.redis_db.hget('myhash', "key1"), "val1")
