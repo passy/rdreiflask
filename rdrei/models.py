@@ -80,7 +80,7 @@ class BaseModel(object):
 
         if 'id' not in self.__dict__:
             # Create a new id.
-            self.id = g.db.incr("photoalbum")
+            self.__dict__['id'] = g.db.incr("photoalbum")
 
         return self._save_existing_hash()
 

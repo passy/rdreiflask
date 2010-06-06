@@ -134,12 +134,12 @@ def dump_fixture(key):
     type = g.db.type(key)
 
     try:
-        fn = _REDIS_FUNC_MAPPING[type]
+        func = _REDIS_FUNC_MAPPING[type]
     except KeyError:
         raise TypeError("Redis keys of type {0} are not yet supported for "
                         "dumping.".format(type))
 
-    value = getattr(g.db, fn)(key)
+    value = getattr(g.db, func)(key)
 
     return {
         'type': type,

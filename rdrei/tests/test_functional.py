@@ -11,7 +11,6 @@ Functional tests
 
 from nose.tools import eq_
 from rdrei.application import app
-from flask import url_for
 
 
 class TestPhotosModule():

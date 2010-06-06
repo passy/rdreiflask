@@ -10,8 +10,8 @@ Photo related views.
 """
 
 from rdrei import settings
-from rdrei.models import Photos, PhotoAlbums, PhotoAlbumNotFoundError
-from rdrei.utils.template import render_template, templated
+from rdrei.models import Photos, PhotoAlbums
+from rdrei.utils.template import templated
 from rdrei.utils.disqus_utils import get_num_posts_by_identifier
 from flask import g, Module
 from werkzeug.exceptions import NotFound, BadRequest

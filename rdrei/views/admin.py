@@ -10,11 +10,10 @@ Admin views.
 """
 
 from flask import url_for, request, redirect, flash, Module, g
-from rdrei.application import app
 from rdrei.models import PhotoAlbums, Photos
 from rdrei.utils.oauth import twitter
 from rdrei.utils.auth import requires_admin
-from rdrei.utils.template import templated, render_template
+from rdrei.utils.template import render_template
 from rdrei.forms import PhotoAlbumForm
 from werkzeug.exceptions import NotFound
 

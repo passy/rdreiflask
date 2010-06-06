@@ -9,7 +9,7 @@ Routing and outputting the views.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-from flask import g, session, request, flash, redirect
+from flask import g, session, request, flash, redirect, url_for
 from rdrei.utils.oauth import twitter
 from rdrei.application import app
 from rdrei.utils.template import render_template

@@ -105,3 +105,7 @@ def get_recent_profile_photos(user_id=FLICKR_USER_ID, max_photos=500,
         if page_index > photos['photos']['pages']:
             # No more photos to fetch.
             break
+
+class FlickrError(Exception):
+    """Base class for flickr errors."""
+    pass
