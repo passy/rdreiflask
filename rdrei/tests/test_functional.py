@@ -13,8 +13,10 @@ from nose.tools import eq_
 from rdrei.application import app
 
 
-class TestPhotosModule():
+class TestPhotosModule(object):
     """Tests the photos pages."""
+
+    __test__ = True
 
     def __init__(self):
         self.app = app.test_client()

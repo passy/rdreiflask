@@ -36,6 +36,8 @@ def _request_context(*args, **kwargs):
 class TestPhotos(object):
     """Tests the Photos model."""
 
+    __test__ = True
+
     def __init__(self):
         """Initializes the redis db."""
 
@@ -81,6 +83,8 @@ class TestPhotos(object):
 
 class TestPhotoAlbums(object):
     """Tests for the photo album model."""
+
+    __test__ = True
 
     def test_next(self):
         """Tests the next methods."""

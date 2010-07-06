@@ -18,9 +18,12 @@ from rdrei.utils import redis_db
 
 
 class TestRedisFixtures(object):
+    """Tests for the redis fixture module."""
+
+    __test__ = True
 
     def __init__(self):
-        # Open the test database
+        """Open the test database."""
         self.request_context = app.test_request_context()
         self.request_context.push()
         app.preprocess_request()
@@ -28,11 +31,12 @@ class TestRedisFixtures(object):
         self.redis_db = g.db = redis_db.open_connection(1)
 
     def __del__(self):
-        # Wipe the test database.
+        """Wipe the test database."""
         self.redis_db.flushdb()
         self.request_context.pop()
 
     def test_load_single_key(self):
+        """Load a single key into the DB."""
         self.redis_db.flushdb()
 
         # This should not be available, yet.

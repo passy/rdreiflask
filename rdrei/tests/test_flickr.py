@@ -7,6 +7,7 @@ TEST_USER_ID = '80007380@N00'
 
 
 def test_api():
+    """Test if a basic query works"""
     client = flickr.FlickrClient(FLICKR_API_KEY)
 
     result = client.flickr_people_getInfo(user_id=TEST_USER_ID)
@@ -14,6 +15,7 @@ def test_api():
 
 
 def test_recent():
+    """Test if we can get the most recent photos"""
     photo_counter = 0
     for photo in flickr.get_recent_profile_photos(TEST_USER_ID, per_page=10,
                                                   max_photos=10):
