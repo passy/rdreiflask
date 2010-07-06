@@ -1,0 +1,2 @@
+git config filter.magicrev.smudge 'perl -pe "s/\\\$Rev[^\\\$]*\\\$/\\\$Rev: `git describe --tags --always`\\\$/"'
+git config filter.magicrev.clean 'perl -pe "s/\\\$Rev[^\\\$]*\\\$/\\\$Rev\\\$/"'

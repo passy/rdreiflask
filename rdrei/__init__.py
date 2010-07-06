@@ -9,4 +9,4 @@ My personal homepage with focus on photos.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-__version__ = r'$Rev: 0.1-git$'[6:-1]
+__version__ = r'$Rev$'[6:-1]
