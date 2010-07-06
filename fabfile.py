@@ -9,8 +9,9 @@ Deployment script.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
+import subprocess
+from os import getcwd, chdir, unlink, path, listdir
 from fabric.api import run, local, env, put, cd, sudo
-from os import getcwd, chdir, unlink
 
 
 def staging():
@@ -33,6 +34,36 @@ def compile_css():
     old_cwd = getcwd()
     chdir("rdrei/static/")
     local("compass compile")
+    chdir(old_cwd)
+
+
+def compress_js():
+    old_cwd = getcwd()
+    if not path.exists("compiler.jar"):
+        raise RuntimeError("compiler.jar should be placed in "
+                           "the root folder!")
+
+    command = "java -jar compiler.jar"
+    proc = subprocess.Popen(command, shell=True,
+                            stdout=subprocess.PIPE,
+                            stdin=subprocess.PIPE)
+
+    chdir("rdrei/static/js/")
+    for filename in listdir("."):
+        if filename == 'rdrei.compress.js':
+            continue
+        with open(filename, 'r') as file:
+            proc.stdin.write(file.read())
+
+    proc.stdin.close()
+    with open("rdrei.compress.js", 'w') as output:
+        output.write(proc.stdout.read())
+
+    proc.stdout.close()
+    if proc.wait() != 0:
+        raise RuntimeError("Closure Compiler exited with failure "
+                           "status!")
+
     chdir(old_cwd)
 
 
