@@ -15,7 +15,7 @@ from fabric.api import run, local, env, put, cd, sudo
 
 
 def staging():
-    env.host_string = "www@test.rdrei.net"
+    env.host_string = "www@new.rdrei.net"
     env.dir = "/home/www/rdreiflask"
     env.git_remote = "staging"
 
@@ -89,11 +89,18 @@ def compress():
     compress_js(commit=True)
 
 
+def version():
+    with cd(env.dir):
+        run("rm rdrei/__init__.py")
+        run("git checkout rdrei/__init__.py")
+
+
 def deploy():
     local("git checkout -b deploy")
     try:
         compress()
         upload()
+        version()
         remote_update()
     finally:
         local("git checkout master")
