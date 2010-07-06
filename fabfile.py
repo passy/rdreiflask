@@ -37,7 +37,7 @@ def compile_css():
     chdir(old_cwd)
 
 
-def compress_js():
+def compress_js(commit=False):
     old_cwd = getcwd()
     if not path.exists("compiler.jar"):
         raise RuntimeError("compiler.jar should be placed in "
@@ -50,7 +50,8 @@ def compress_js():
 
     chdir("rdrei/static/js/")
     for filename in listdir("."):
-        if filename == 'rdrei.compress.js':
+        if filename == 'rdrei.compress.js' or \
+           filename.startswith('.'):
             continue
         with open(filename, 'r') as file:
             proc.stdin.write(file.read())
@@ -63,6 +64,10 @@ def compress_js():
     if proc.wait() != 0:
         raise RuntimeError("Closure Compiler exited with failure "
                            "status!")
+
+    if commit:
+        local("git add -f rdrei.compress.js")
+        local("git commit -m 'JS Update'")
 
     chdir(old_cwd)
 
@@ -81,7 +86,7 @@ def remote_update():
 
 def compress():
     compress_css()
-    # TODO: Compress JS
+    compress_js(commit=True)
 
 
 def deploy():
