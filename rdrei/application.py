@@ -10,9 +10,9 @@ Main entry point for for rdrei.net.
 """
 
 from flask import Flask, g, session
-from rdrei import settings
+from rdrei import settings, __version__
 
-app = Flask(__name__)
+app = Flask('rdrei')
 app.config.from_object(settings)
 
 from rdrei.utils import redis_db
@@ -22,6 +22,12 @@ from rdrei.views.admin import admin
 app.register_module(photos)
 app.register_module(admin)
 
+
+@app.before_request
+def _set_template_vars():
+    """Make debug mode and version available to the template."""
+    g.debug = settings.DEBUG
+    g.version = __version__
 
 @app.before_request
 def _open_redis():
