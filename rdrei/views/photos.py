@@ -59,6 +59,9 @@ def details(album_id, photo_id):
     if not all([album, photo]):
         raise NotFound("Either album or photo could not be found.")
 
+    if photo not in album:
+        raise NotFound("Photo exists, but you're looking in the wrong place.")
+
     prev_photo = album.previous_photo(photo_id)
     next_photos = list(album.next_photos(photo_id,
                                     settings.PHOTOS_PRELOAD_NEXT_COUNT))

@@ -11,13 +11,14 @@ I have no fixtures for. This is a TODO.
 """
 
 
-from rdrei.models import Photos, PhotoAlbums
+from rdrei.models import Photos, PhotoAlbums, PhotoNotFoundError
 from rdrei.tests.utils import get_fixture_path
 from rdrei.utils.redis_fixtures import load_fixture
 from rdrei.utils import redis_db
 from rdrei.application import app
 from flask import g
 from contextlib import contextmanager
+from nose.tools import raises
 
 
 @contextmanager
@@ -137,3 +138,11 @@ class TestPhotoAlbums(object):
             next_list = list(album.next_photos('2765703092'))
 
             assert len(next_list) == 0
+
+    @raises(PhotoNotFoundError)
+    def test_access_photo_not_in_album(self):
+        """Access a photo that is not in an album."""
+
+        with _request_context('/'):
+            album = PhotoAlbums.by_id(1)
+            prev_photo = album.previous_photo('2771608178')

@@ -172,6 +172,12 @@ class PhotoAlbum(BaseModel):
 
     __prefix__ = "photoalbum"
 
+    def __contains__(self, photo):
+        """Check if a photo exists in the album."""
+
+        photo_ids = g.db.smembers('phototags:' + self.tag)
+        return photo.id in photo_ids
+
     @cached_property
     def photos(self):
         return g.db.smembers("phototags:" + self.tag)
@@ -192,7 +198,10 @@ class PhotoAlbum(BaseModel):
         """
 
         photos = list(self.photos)
-        index = photos.index(str(photo_id)) + 1
+        try:
+            index = photos.index(str(photo_id)) + 1
+        except ValueError:
+            raise PhotoNotFoundError()
         upper_index = min(index + count, len(photos))
         element_ids = photos[index:upper_index]
 
@@ -211,7 +220,10 @@ class PhotoAlbum(BaseModel):
         """
 
         photos = list(self.photos)
-        index = photos.index(str(photo_id))
+        try:
+            index = photos.index(str(photo_id))
+        except ValueError:
+            raise PhotoNotFoundError()
         lower_index = max(0, index - count)
         element_ids = photos[lower_index:index]
         element_ids.reverse()
@@ -283,4 +295,7 @@ class PhotoAlbums(object):
 
 
 class PhotoAlbumNotFoundError(Exception):
+    pass
+
+class PhotoNotFoundError(Exception):
     pass
