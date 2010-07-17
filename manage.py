@@ -10,68 +10,63 @@ Management script.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-from werkzeug import script
+from contextlib import contextmanager
+from flaskext.script import Manager
+from rdrei.application import app
 
 
-def _prepare_context(app):
+manager = Manager(app)
+
+
+@contextmanager
+def _prepared_context(app):
     ctx = app.test_request_context()
     ctx.push()
     app.preprocess_request()
-
-    return ctx
-
-
-def action_runserver():
-    from rdrei.application import app
-
-    app.run(debug=True, host="0.0.0.0")
+    yield
+    ctx.pop()
 
 
-def action_flickr_import():
-    from rdrei.application import app
-    from rdrei.utils.redis_db import open_connection
+@manager.command
+def flickr_import(app):
+    """Import the latest photos to redis."""
+    from flask import g
     from rdrei.utils import flickr
 
-    # Without this, redis is not initialized.
-    db = open_connection()
+    with _prepared_context(app):
+        for photo in flickr.get_recent_profile_photos():
+            # Check if the entry exists.
+            key = 'photo:' + photo['id']
+            print("Current Key: ", key)
+            if g.db.exists(key):
+                print("Came across already known photo.")
+                break
 
-    for photo in flickr.get_recent_profile_photos():
-        # Check if the entry exists.
-        key = 'photo:' + photo['id']
-        print("Current Key: ", key)
-        if db.exists(key):
-            print("Came across already known photo.")
-            break
+            for subkey in ('title', 'farm', 'server', 'secret', 'id',
+                           'original_secret', 'height_o', 'width_o',
+                           'height_m', 'width_m'):
+                # We need to double-check, because flickr is very picky about
+                # what and when to include attributes.
+                if subkey in photo:
+                    g.db.hset(key, subkey, photo[subkey])
 
-        for subkey in ('title', 'farm', 'server', 'secret', 'id',
-                       'original_secret', 'height_o', 'width_o',
-                       'height_m', 'width_m'):
-            # We need to double-check, because flickr is very picky about what
-            # and when to include attributes.
-            if subkey in photo:
-                db.hset(key, subkey, photo[subkey])
+            # Save the tags to subsets
+            for tag in photo['tags'].split(' '):
+                g.db.sadd('phototags:' + tag, photo['id'])
+                # And don't forget to keep track of the tags itself.
+                g.db.sadd('phototags', tag)
 
-        # Save the tags to subsets
-        for tag in photo['tags'].split(' '):
-            db.sadd('phototags:' + tag, photo['id'])
-            # And don't forget to keep track of the tags itself.
-            db.sadd('phototags', tag)
-
-        db.sadd('photos', photo['id'])
+            g.db.sadd('photos', photo['id'])
 
 
-
-
-def action_dump_photos():
+@manager.command
+def dump_photos(app):
     """
     Dumps the photos from redis to stdout.
     """
     import simplejson
     from flask import g
-    from rdrei.application import app
     from rdrei.utils.redis_fixtures import dump_fixture
-    ctx = _prepare_context(app)
-
 
     # As 'closure' to not load simplejson in global space.
     class _SetSerializer(simplejson.JSONEncoder):
@@ -81,58 +76,54 @@ def action_dump_photos():
 
             return simplejson.JSONEncoder.default(self, obj)
 
+    with _prepared_context(app):
+        result = []
+        result.append(dump_fixture("photos"))
 
-    result = []
-    result.append(dump_fixture("photos"))
+        for photo in g.db.smembers("photos"):
+            result.append(dump_fixture("photo:" + photo))
 
-    for photo in g.db.smembers("photos"):
-        result.append(dump_fixture("photo:" + photo))
+        result.append(dump_fixture("phototags"))
 
-    result.append(dump_fixture("phototags"))
+        for phototag in g.db.smembers("phototags"):
+            result.append(dump_fixture("phototags:" + phototag))
 
-    for phototag in g.db.smembers("phototags"):
-        result.append(dump_fixture("phototags:" + phototag))
-
-    print(simplejson.dumps(result, cls=_SetSerializer))
-
-    ctx.pop()
+        print(simplejson.dumps(result, cls=_SetSerializer))
 
 
-def action_dump_albums():
+@manager.command
+def dump_albums(app):
     """Dumps the albums to stdout."""
 
     import simplejson
     from flask import g
-    from rdrei.application import app
     from rdrei.utils.redis_fixtures import dump_fixture
 
-    ctx = _prepare_context(app)
+    with _prepared_context(app):
+        result = []
+        result.append(dump_fixture("photoalbum"))
 
-    result = []
-    result.append(dump_fixture("photoalbum"))
+        for i in xrange(1, int(g.db.get("photoalbum"))):
+            key = "photoalbum:" + str(i)
+            if g.db.exists(key):
+                result.append(dump_fixture(key))
 
-    for i in xrange(1, int(g.db.get("photoalbum"))):
-        key = "photoalbum:" + str(i)
-        if g.db.exists(key):
-            result.append(dump_fixture(key))
-
-    print(simplejson.dumps(result))
-
-    ctx.pop()
+        print(simplejson.dumps(result))
 
 
-def action_load_dump(filename="data.json"):
-    """Loads a fixture from a file."""
+@manager.command
+def load_dump(app, filename="data.json"):
+    """
+    Loads a fixture from a file.
+
+    :param filename: Filename to load the JSON dump from.
+    """
 
     from rdrei.utils.redis_fixtures import load_fixture
-    from rdrei.application import app
-    ctx = _prepare_context(app)
-
-    load_fixture(filename)
-
-    ctx.pop()
+    with _prepared_context(app):
+        load_fixture(filename)
 
 
 if __name__ == '__main__':
-    script.run()
+    manager.run()
 # vim: set ts=8 sw=4 tw=78 ft=python:
