@@ -1,0 +1,3 @@
+# mongrel2/pym2 seems to be not im pypi or a seperate repo \:
+-e git://github.com/passy/mongrel2_wsgi.git#egg=mongrel2_wsgi
+
