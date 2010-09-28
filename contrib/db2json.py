@@ -10,7 +10,7 @@ Converts my old sqlite db to a json fixture.
 """
 
 import sqlite3
-import simplejson
+from python import json
 from contextlib import closing
 
 
@@ -63,7 +63,7 @@ def main():
                     'value': entry['id']
                 })
 
-    print simplejson.dumps(result)
+    print(json.dumps(result))
 
 
 if __name__ == '__main__':

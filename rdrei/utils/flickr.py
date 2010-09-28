@@ -9,7 +9,7 @@ Some utils to access the flickr api easily.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-import simplejson
+import json
 import re
 from rdrei.settings import FLICKR_USER_ID, FLICKR_API_KEY
 from urllib import urlencode
@@ -53,7 +53,7 @@ class FlickrClient(object):
 
         # flickr returns JSONP what is not what we want, so we strip of the
         # leading 'jsonFlickrApi(' and the trailing ')'.
-        data = simplejson.loads(response[14:-1])
+        data = json.loads(response[14:-1])
         if data['stat'] == 'fail':
             raise FlickrError(data['err']['code'], data['err']['msg'])
 

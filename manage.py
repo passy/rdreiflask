@@ -64,17 +64,17 @@ def dump_photos(app):
     """
     Dumps the photos from redis to stdout.
     """
-    import simplejson
+    import json
     from flask import g
     from rdrei.utils.redis_fixtures import dump_fixture
 
-    # As 'closure' to not load simplejson in global space.
-    class _SetSerializer(simplejson.JSONEncoder):
+    # As 'closure' to not load json in global space.
+    class _SetSerializer(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, set):
                 return list(obj)
 
-            return simplejson.JSONEncoder.default(self, obj)
+            return json.JSONEncoder.default(self, obj)
 
     with _prepared_context(app):
         result = []
@@ -88,14 +88,14 @@ def dump_photos(app):
         for phototag in g.db.smembers("phototags"):
             result.append(dump_fixture("phototags:" + phototag))
 
-        print(simplejson.dumps(result, cls=_SetSerializer))
+        print(json.dumps(result, cls=_SetSerializer))
 
 
 @manager.command
 def dump_albums(app):
     """Dumps the albums to stdout."""
 
-    import simplejson
+    import json
     from flask import g
     from rdrei.utils.redis_fixtures import dump_fixture
 
@@ -108,7 +108,7 @@ def dump_albums(app):
             if g.db.exists(key):
                 result.append(dump_fixture(key))
 
-        print(simplejson.dumps(result))
+        print(json.dumps(result))
 
 
 @manager.command

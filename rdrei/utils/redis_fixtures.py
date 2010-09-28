@@ -10,7 +10,7 @@ Loading data into redis from JSOM files.
 """
 
 from flask import g
-import simplejson
+import json
 
 
 class RedisDataLoader(object):
@@ -103,7 +103,7 @@ def load_fixture(filename):
     :param filename: Path to the fixture json file.
     """
 
-    json_data = simplejson.load(open(filename, 'r'))
+    json_data = json.load(open(filename, 'r'))
     # Create a new pipeline for 'transactional' writing.
     pipeline = g.db.pipeline()
 

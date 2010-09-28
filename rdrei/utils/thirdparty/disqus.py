@@ -6,7 +6,7 @@ disqus-api-client
 A disqus api client for python.
 """
 
-import simplejson
+import json
 import httplib
 import urllib
 import datetime
@@ -314,9 +314,9 @@ class DisqusService(object):
             resp_data = resp.read()
             print resp.status
             print resp_data
-            return self._decode_response(simplejson.loads(resp_data))
+            return self._decode_response(json.loads(resp_data))
         else:
-            return self._decode_response(simplejson.load(resp))
+            return self._decode_response(json.load(resp))
 
     def _decode_response(self, dct):
         if dct.get("code") == "ok" and dct.get("succeeded"):

@@ -4,5 +4,4 @@ flask
 git+http://github.com/andymccurdy/redis-py.git#egg=redis
 Flask-OAuth
 wtforms
-simplejson
 Flask-Script==0.2
