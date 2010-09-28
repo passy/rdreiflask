@@ -31,8 +31,9 @@ class FlickrURL(object):
     def __getattr__(self, method):
         """
         Allows access to flickr url in an easy manner. Like
-        photo = Photo.by_id(123)
-        url = photo.url.thumb
+        >>> photo = Photo.by_id(123)
+        >>> url = photo.url.thumb
+        http://farm...
         """
 
         if method in self._SIZE_MAPPING:
@@ -296,6 +297,7 @@ class PhotoAlbums(object):
 
 class PhotoAlbumNotFoundError(Exception):
     pass
+
 
 class PhotoNotFoundError(Exception):
     pass

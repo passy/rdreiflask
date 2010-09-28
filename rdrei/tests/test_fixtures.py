@@ -12,23 +12,25 @@ Test the fixture support.
 from nose.tools import eq_
 from flask import g
 from rdrei.tests.utils import get_fixture_path
-from rdrei.application import app
+from rdrei.application import create_app
 from rdrei.utils.redis_fixtures import load_fixture
-from rdrei.utils import redis_db
+from rdrei.utils import redis
 
 
 class TestRedisFixtures(object):
-    """Tests for the redis fixture module."""
+    """Tests for the redis fixture module. This relies on a huge amount of
+    hard-coded data that can be found in the fixtures.
+    """
 
     __test__ = True
 
     def __init__(self):
         """Open the test database."""
-        self.request_context = app.test_request_context()
+        self.app = create_app()
+        self.request_context = self.app.test_request_context()
         self.request_context.push()
-        app.preprocess_request()
-
-        self.redis_db = g.db = redis_db.open_connection(1)
+        self.app.preprocess_request()
+        self.redis_db = g.db
 
     def __del__(self):
         """Wipe the test database."""

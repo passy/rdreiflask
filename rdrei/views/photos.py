@@ -9,13 +9,12 @@ Photo related views.
 :license: GPL v3, see doc/LICENSE for more details.
 """
 
-from rdrei import settings
 from rdrei.models import Photos, PhotoAlbums
 from rdrei.utils.template import templated
 from rdrei.utils.disqus_utils import get_num_posts_by_identifier
-from flask import g, Module
+from rdrei.utils.thirdparty.disqus import APIError
+from flask import g, current_app, Module
 from werkzeug.exceptions import NotFound, BadRequest
-from disqus import APIError
 
 
 photos = Module(__name__, url_prefix="/photos")
@@ -63,8 +62,9 @@ def details(album_id, photo_id):
         raise NotFound("Photo exists, but you're looking in the wrong place.")
 
     prev_photo = album.previous_photo(photo_id)
-    next_photos = list(album.next_photos(photo_id,
-                                    settings.PHOTOS_PRELOAD_NEXT_COUNT))
+    next_photos = list(album.next_photos(
+        photo_id,
+        current_app.config['PHOTOS_PRELOAD_NEXT_COUNT']))
     if next_photos:
         next_photo = next_photos[0]
     else:

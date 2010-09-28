@@ -12,10 +12,10 @@ Management script.
 
 from contextlib import contextmanager
 from flaskext.script import Manager
-from rdrei.application import app
+from rdrei.application import create_app
 
 
-manager = Manager(app)
+manager = Manager(create_app())
 
 
 @contextmanager

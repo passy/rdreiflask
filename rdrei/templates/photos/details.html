@@ -5,7 +5,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% macro show_photo(photo, class="photo") %}
-    <img class="{{ class }}" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}" />
+    <img class="{{ class }}" src="{{ photo.url.medium }}" alt="" title="{{ photo.title }}">
 {% endmacro %}
 
 {% block content %}
@@ -33,7 +33,7 @@
 <div class="photo-container{% if photo.horizontal %} horizontal{% endif %}">
     <div>
         <!-- The preview is usually in cache, so this helps. -->
-        <img class="preview" src="{{ photo.url.small }}" alt="" />
+        <img class="preview" src="{{ photo.url.small }}" alt="">
         {% if next_photo %}
         <a class="next" {{ link_attr("details", album_id=album.id, photo_id=next_photo.id) }}>
             {{ show_photo(photo) }}
@@ -60,7 +60,7 @@ $(function () {
     });
     $.get("{{ url_for('num_comments', photo_id=photo.id) }}", function (data) {
         var text = "Kommentar schreiben",
-            num = parseInt(data);        
+            num = parseInt(data);
         if (num > 1) {
             text = data + " Kommentare anzeigen";
         } else if (num == 1) {
